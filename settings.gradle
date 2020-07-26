@@ -1,0 +1,25 @@
+rootProject.name = 'brewer'
+
+/* Implements the persistence layer of our application.
+ */
+include 'adapters:brewer-persistence'
+
+/* The web layer of our application, which may call the uses cases implemented in the application
+ * module.
+ */
+include 'adapters:brewer-web'
+
+/* Holds classes that make up the “application layer”: services that implement use cases which query
+ * and modify the domain model.
+ */
+include 'brewer-application'
+
+/* Provides certain classes that can be accessed by all other modules.
+ */
+include 'brewer-commons'
+
+/* Actual Spring Boot application (main class) and any Spring Java Configuration that puts together
+ * the Spring application context. To create the application context, it needs access to the other
+ * modules, which each provides certain parts of the application.
+ */
+include 'brewer-configuration'

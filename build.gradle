@@ -1,0 +1,40 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+}
+
+sourceCompatibility = '11'
+
+def props = new Properties()
+file('brewer-configuration/src/main/resources/application.properties').withInputStream {
+    props.load(it)
+}
+
+ext {
+    setProperty('springBootVersion', '2.3.1.RELEASE')
+}
+
+subprojects {
+    group 'io.bandrefilipe'
+    version props.getProperty('app.version')
+
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        // Lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+    }
+}
