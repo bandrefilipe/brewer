@@ -19,19 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package io.bandrefilipe.brewer.web.controller;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@SpringBootApplication
-class BrewerApplication {
-
-    public static void main(final String[] args) {
-        SpringApplication.run(BrewerApplication.class, args);
-    }
-}
+public interface ControllerPackageMarker {}

@@ -19,19 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer;
+package io.bandrefilipe.brewer.web.config.swagger;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.bandrefilipe.brewer.web.controller.ControllerPackageMarker;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.builders.RequestHandlerSelectors;
+
+import java.util.function.Predicate;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@SpringBootApplication
-class BrewerApplication {
+@Slf4j
+@Configuration
+class RequestHandlerBean {
 
-    public static void main(final String[] args) {
-        SpringApplication.run(BrewerApplication.class, args);
+    @Bean
+    @Profile("default | dev | qa")
+    Predicate<RequestHandler> defaultRequestHandler() {
+        log.debug("Creating bean defaultRequestHandler");
+        return RequestHandlerSelectors.any();
+    }
+
+    @Bean
+    @Profile("prod")
+    Predicate<RequestHandler> prodRequestHandler() {
+        log.debug("Creating bean prodRequestHandler");
+        return RequestHandlerSelectors.basePackage(ControllerPackageMarker.class.getPackageName());
     }
 }
