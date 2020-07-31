@@ -14,7 +14,7 @@ The main feature of the Hexagonal Architecture, as opposed to the commonly used 
 The hexagon is just a fancy way to describe the core of the application that is made up of domain objects, use cases that operate on them, and input and output ports that provide an interface to the outside "world" (the adapters).
 
 ### Modules
-The application is dived in multiple modules, following the aforementioned hexagonal architecture.
+The application is divided in multiple modules, following the aforementioned hexagonal architecture.
 
 - [brewer-application](./brewer-application/README.md "brewer-application")
   > Holds classes that make up the core of the application: services that implement use cases which query and modify the domain model
