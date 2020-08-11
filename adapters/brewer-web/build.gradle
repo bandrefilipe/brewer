@@ -6,6 +6,10 @@ dependencies {
     implementation project(':brewer-application')
     implementation project(':brewer-commons')
 
+    // Spring Boot Starter :: Actuator
+    implementation('org.springframework.boot:spring-boot-starter-actuator') {
+        exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
+    }
     // Spring Boot Starter :: Web
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
