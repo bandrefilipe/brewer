@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Hello, Thymeleaf!</h1>
+</body>
+<form method="post">
+    <span data-th-text="${message}"></span>
+    <br>
+
+    <label for="sku">SKU</label>
+    <input type="text" id="sku" name="sku"/>
+    <br>
+
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name"/>
+    <br>
+
+    <label for="description">Description</label>
+    <textarea rows="4" cols="35" id="description" name="description"></textarea>
+    <br>
+
+    <input type="submit" value="Save">
+</form>
+</html>

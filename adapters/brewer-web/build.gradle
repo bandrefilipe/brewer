@@ -14,6 +14,8 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     // Spring Boot Starter :: Thymeleaf
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    // Spring Boot Starter :: Validation
+    implementation('org.springframework.boot:spring-boot-starter-validation')
     // Spring Boot Starter :: Web
     implementation('org.springframework.boot:spring-boot-starter-web')
     // Springfox Boot Starter
