@@ -55,15 +55,12 @@ class BeerRegistrationController {
     @PostMapping
     public ModelAndView postBeerRegistrationForm(@Valid final BeerRegistrationModel beerRegistrationModel,
                                                  final BindingResult bindingResult,
-                                                 final Model model,
                                                  final RedirectAttributes redirectAttributes) {
         log.debug("input: {}", beerRegistrationModel);
         if (bindingResult.hasErrors()) {
             log.error("errors: {}", bindingResult.getAllErrors());
-            model.addAttribute("message", (bindingResult.getErrorCount() + " errors occurred"));
             return getBeerRegistrationPage(beerRegistrationModel);
         }
-        redirectAttributes.addFlashAttribute("message", "Success");
         return new ModelAndView("redirect:" + Paths.BEER_REGISTRATION);
     }
 }
