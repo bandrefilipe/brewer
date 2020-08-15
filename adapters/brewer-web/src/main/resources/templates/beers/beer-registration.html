@@ -3,20 +3,22 @@
 <body>
 <h1>Hello, Thymeleaf!</h1>
 </body>
-<form method="post">
-    <span data-th-text="${message}"></span>
+
+<div data-th-each="error : ${#fields.detailedErrors('${beerRegistrationModel.*}')}">
+    <span data-th-text="${error.message}">Dummy error message</span>
+</div>
+
+<form method="post" data-th-object="${beerRegistrationModel}">
+    <label for="_sku">SKU</label>
+    <input id="_sku" type="text" data-th-field="*{sku}"/>
     <br>
 
-    <label for="sku">SKU</label>
-    <input type="text" id="sku" name="sku"/>
+    <label for="_name">Name</label>
+    <input id="_name" type="text" data-th-field="*{name}"/>
     <br>
 
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name"/>
-    <br>
-
-    <label for="description">Description</label>
-    <textarea rows="4" cols="35" id="description" name="description"></textarea>
+    <label for="_description">Description</label>
+    <textarea id="_description" rows="4" cols="35" data-th-maxlength="*{descriptionMaxLength}" data-th-field="*{description}"></textarea>
     <br>
 
     <input type="submit" value="Save">
