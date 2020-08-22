@@ -4,6 +4,9 @@ configurations {
 
 ext {
     setProperty('springfoxVersion', '3.0.0')
+    setProperty('bootstrapVersion', '3.3.7-1')
+    setProperty('jqueryVersion', '1.12.4')
+    setProperty('webjarsLocatorVersion', '0.40')
 }
 
 dependencies {
@@ -20,4 +23,10 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     // Springfox Boot Starter
     implementation("io.springfox:springfox-boot-starter:${springfoxVersion}")
+    // Webjars :: Bootstrap
+    implementation("org.webjars:bootstrap:${bootstrapVersion}")
+    // Webjars :: jQuery
+    implementation("org.webjars:jquery:${jqueryVersion}")
+    // Webjars :: Locator
+    implementation("org.webjars:webjars-locator:${webjarsLocatorVersion}")
 }

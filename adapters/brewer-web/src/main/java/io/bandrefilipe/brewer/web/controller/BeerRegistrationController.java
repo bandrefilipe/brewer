@@ -24,43 +24,42 @@ package io.bandrefilipe.brewer.web.controller;
 import io.bandrefilipe.brewer.web.model.BeerRegistrationModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
 @Slf4j
-@Controller
+@org.springframework.stereotype.Controller
 @RequestMapping(
         path = Paths.BEER_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class BeerRegistrationController {
+class BeerRegistrationController implements Controller {
 
     @GetMapping
     public ModelAndView getBeerRegistrationPage(final BeerRegistrationModel beerRegistrationModel) {
         log.debug("input: {}", beerRegistrationModel);
-        return new ModelAndView(ViewNames.BEER_REGISTRATION);
+        final var modelAndView = new ModelAndView(ViewNames.BEER_REGISTRATION);
+        modelAndView.addObject("origins", Arrays.asList("Domestic", "Imported"));
+        return modelAndView;
     }
 
     @PostMapping
     public ModelAndView postBeerRegistrationForm(@Valid final BeerRegistrationModel beerRegistrationModel,
-                                                 final BindingResult bindingResult,
-                                                 final RedirectAttributes redirectAttributes) {
+                                                 final BindingResult bindingResult) {
         log.debug("input: {}", beerRegistrationModel);
         if (bindingResult.hasErrors()) {
-            log.error("errors: {}", bindingResult.getAllErrors());
+            log.debug("errors: {}", bindingResult.getAllErrors());
             return getBeerRegistrationPage(beerRegistrationModel);
         }
-        return new ModelAndView("redirect:" + Paths.BEER_REGISTRATION);
+        return new ModelAndView(redirect(Paths.BEER_REGISTRATION));
     }
 }
