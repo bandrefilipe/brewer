@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Brewer!</title>
+
+  <!--  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">-->
+  <!--  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap-theme.min.css">-->
+  <link rel="stylesheet" href="/layout/stylesheets/vendors.min.css">
+  <link rel="stylesheet" href="/layout/stylesheets/algaworks.min.css">
+  <link rel="stylesheet" href="/layout/stylesheets/application.css">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+<div class="aw-layout-page">
+  <nav id="_main-navbar" class="navbar  navbar-default  navbar-fixed-top  js-sticky-reference">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand  hidden-xs" href="#">
+          <img alt="Brewer!" src="/images/logo.png">
+        </a>
+
+        <ul class="nav  navbar-nav">
+          <li>
+            <a href="#" class="js-sidebar-toggle">
+              <span class="fa  fa-bars"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <ul class="nav  navbar-nav  navbar-right">
+        <li>
+          <a href="#"><em class="fa  fa-sign-out"></em></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <aside class="aw-layout-sidebar  js-sidebar">
+    <div class="aw-menu__content">
+      <nav class="aw-menu  js-menu">
+        <ul class="aw-menu__list">
+          <li class="aw-menu__item">
+            <a href="#">
+              <span class="fa  fa-fw  fa-home"></span><span>Dummy Item A</span>
+            </a>
+          </li>
+
+          <li class="aw-menu__item  is-active">
+            <a href="#">
+              <span class="fa  fa-fw  fa-file-text"></span><span>Dummy Item B</span>
+              <span class="aw-menu__navigation-icon  fa"></span>
+            </a>
+
+            <ul class="aw-menu__list  aw-menu__list--sublist">
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy Sub Item A</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link  is-active">
+                <a href="#">Dummy Sub Item B</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy Sub Item C</a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="aw-menu__item  is-expanded">
+            <a href="#">
+              <span class="fa  fa-fw  fa-file-text"></span><span>Dummy Item C</span>
+              <span class="aw-menu__navigation-icon  fa"></span>
+            </a>
+
+            <ul class="aw-menu__list  aw-menu__list--sublist">
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy Sub Item A</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy Sub Item B</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy Sub Item C</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy 403 Page</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy 404 Page</a>
+              </li>
+              <li class="aw-menu__item  aw-menu__item--link">
+                <a href="#">Dummy 500 Page</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <section class="aw-layout-content  js-content" layout:fragment="content"></section>
+
+  <footer class="aw-layout-footer  js-content">
+    <div class="container-fluid">
+      <span class="aw-footer-disclaimer">&copy; 2020 Brewer. All rights reserved.</span>
+    </div>
+  </footer>
+</div>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+<!--<script>window.jQuery || document.write('<script src="/webjars/jquery/jquery.min.js"><\/script>')</script>-->
+<!--<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>-->
+<script src="/layout/javascripts/vendors.min.js"></script>
+<script src="/layout/javascripts/algaworks.min.js"></script>
+</body>
+</html>
