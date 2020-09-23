@@ -11,7 +11,7 @@ file('brewer-configuration/src/main/resources/application.properties').withInput
 }
 
 ext {
-    setProperty('springBootVersion', '2.3.2.RELEASE')
+    setProperty('springBootVersion', '2.3.4.RELEASE')
 }
 
 subprojects {
