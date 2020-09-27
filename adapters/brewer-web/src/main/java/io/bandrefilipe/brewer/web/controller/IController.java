@@ -25,7 +25,7 @@ package io.bandrefilipe.brewer.web.controller;
  * @author bandrefilipe
  * @since 1.0.0
  */
-public interface Controller {
+public interface IController {
 
     default String redirect(String path) {
         return "redirect:" + path;

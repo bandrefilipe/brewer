@@ -24,6 +24,7 @@ package io.bandrefilipe.brewer.web.controller;
 import io.bandrefilipe.brewer.web.model.BeerRegistrationModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,11 +39,11 @@ import java.util.Arrays;
  * @since 1.0.0
  */
 @Slf4j
-@org.springframework.stereotype.Controller
+@Controller
 @RequestMapping(
         path = Paths.BEER_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class BeerRegistrationController implements Controller {
+class BeerRegistrationController implements IController {
 
     @GetMapping
     public ModelAndView getBeerRegistrationPage(final BeerRegistrationModel beerRegistrationModel) {
