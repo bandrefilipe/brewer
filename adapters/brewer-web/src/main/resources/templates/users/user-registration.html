@@ -5,6 +5,8 @@
 
 <head>
   <title>Brewer! - User Registration</title>
+
+  <link rel="stylesheet" type="text/css" data-th-href="@{/stylesheets/vendors/bootstrap-switch.min.css}"/>
 </head>
 
 <body>
@@ -55,9 +57,10 @@
 
         <div class="col-sm-3  form-group">
           <label class="control-label">Status</label>
-          <div class="checkbox">
-            <input id="_status-active" type="checkbox"/>
-            <label for="_status-active">Active</label>
+          <div>
+            <input id="_status-active" class="js-checkbox-toggle" type="checkbox" data-size="small"
+                   data-on-text="Active" data-off-text="Inactive"
+            />
           </div>
         </div>
       </div>
@@ -81,7 +84,11 @@
       </div>
     </form>
   </div>
-
 </section>
+
+<!--/*/ <th:block layout:fragment="javascript-extra"> /*/-->
+  <script data-th-src="@{/javascripts/vendors/bootstrap-switch.min.js}"></script>
+  <script data-th-src="@{/javascripts/brewer-bootstrap-switch.js}"></script>
+<!--/*/ </th:block> /*/-->
 </body>
 </html>

@@ -1,9 +1,7 @@
 $(function() {
-    const decimal = $('.js-decimal');
-    decimal.maskMoney();
+    $('.js-decimal').maskMoney();
 
-    const integer = $('.js-integer');
-    integer.maskMoney({
+    $('.js-integer').maskMoney({
         precision: 0
     });
 });
