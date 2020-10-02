@@ -32,6 +32,7 @@ import lombok.NoArgsConstructor;
 final class Paths {
 
     static final String BEER_REGISTRATION = "/beer/registration";
+    static final String CITY_REGISTRATION = "/city/registration";
     static final String CLIENT_REGISTRATION = "/client/registration";
     static final String USER_REGISTRATION = "/user/registration";
 }
