@@ -19,21 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.controller;
+package io.bandrefilipe.brewer.web.model;
 
-import lombok.AccessLevel;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class Paths {
-
-    static final String BEER_REGISTRATION = "/beer/registration";
-    static final String BEER_TYPE_REGISTRATION = "/beer/type/registration";
-    static final String CITY_REGISTRATION = "/city/registration";
-    static final String CLIENT_REGISTRATION = "/client/registration";
-    static final String USER_REGISTRATION = "/user/registration";
+@Data
+@NoArgsConstructor
+public final class UserRegistrationModel {
 }

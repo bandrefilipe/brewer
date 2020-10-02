@@ -19,10 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.controller;
+package io.bandrefilipe.brewer.web.model;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-public interface ControllerPackageMarker {}
+@Data
+@NoArgsConstructor
+public class CityRegistrationModel {
+}

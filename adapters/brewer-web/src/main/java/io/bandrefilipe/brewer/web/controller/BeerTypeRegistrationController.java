@@ -21,7 +21,7 @@
  */
 package io.bandrefilipe.brewer.web.controller;
 
-import io.bandrefilipe.brewer.web.model.BeerRegistrationModel;
+import io.bandrefilipe.brewer.web.model.BeerTypeRegistrationModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 
 /**
  * @author bandrefilipe
@@ -41,26 +40,24 @@ import java.util.Arrays;
 @Slf4j
 @Controller
 @RequestMapping(
-        path = Paths.BEER_REGISTRATION,
+        path = Paths.BEER_TYPE_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class BeerRegistrationController implements IController {
+class BeerTypeRegistrationController implements IController {
 
     @GetMapping
-    public ModelAndView getBeerRegistrationPage(final BeerRegistrationModel beerRegistrationModel) {
-        log.debug("input: {}", beerRegistrationModel);
-        final var modelAndView = new ModelAndView(ViewNames.BEER_REGISTRATION);
-        modelAndView.addObject("origins", Arrays.asList("Domestic", "Imported"));
-        return modelAndView;
+    public ModelAndView getBeerTypeRegistrationPage(final BeerTypeRegistrationModel beerTypeRegistrationModel) {
+        log.debug("input: {}", beerTypeRegistrationModel);
+        return new ModelAndView(ViewNames.BEER_TYPE_REGISTRATION);
     }
 
     @PostMapping
-    public ModelAndView postBeerRegistrationForm(@Valid final BeerRegistrationModel beerRegistrationModel,
-                                                 final BindingResult bindingResult) {
-        log.debug("input: {}", beerRegistrationModel);
+    public ModelAndView postBeerTypeRegistrationForm(@Valid final BeerTypeRegistrationModel beerTypeRegistrationModel,
+                                                     final BindingResult bindingResult) {
+        log.debug("input: {}", beerTypeRegistrationModel);
         if (bindingResult.hasErrors()) {
             log.debug("errors: {}", bindingResult.getAllErrors());
-            return getBeerRegistrationPage(beerRegistrationModel);
+            return getBeerTypeRegistrationPage(beerTypeRegistrationModel);
         }
-        return new ModelAndView(redirect(Paths.BEER_REGISTRATION));
+        return new ModelAndView(redirect(Paths.BEER_TYPE_REGISTRATION));
     }
 }

@@ -32,4 +32,8 @@ import lombok.NoArgsConstructor;
 final class ViewNames {
 
     static final String BEER_REGISTRATION = "beers/beer-registration";
+    static final String BEER_TYPE_REGISTRATION = "beers/types/type-registration";
+    static final String CITY_REGISTRATION = "cities/city-registration";
+    static final String CLIENT_REGISTRATION = "clients/client-registration";
+    static final String USER_REGISTRATION = "users/user-registration";
 }

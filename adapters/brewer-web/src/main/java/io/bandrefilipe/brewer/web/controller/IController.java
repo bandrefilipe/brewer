@@ -21,19 +21,13 @@
  */
 package io.bandrefilipe.brewer.web.controller;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class Paths {
+public interface IController {
 
-    static final String BEER_REGISTRATION = "/beer/registration";
-    static final String BEER_TYPE_REGISTRATION = "/beer/type/registration";
-    static final String CITY_REGISTRATION = "/city/registration";
-    static final String CLIENT_REGISTRATION = "/client/registration";
-    static final String USER_REGISTRATION = "/user/registration";
+    default String redirect(String path) {
+        return "redirect:" + path;
+    }
 }

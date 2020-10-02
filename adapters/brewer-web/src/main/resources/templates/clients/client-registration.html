@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default-layout}">
+
+<head>
+  <title>Brewer! - Client Registration</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>Client Registration</h1>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+
+    <div class="alert  alert-danger" role="alert" data-th-if="${#fields.hasErrors('${clientRegistrationModel.*}')}">
+      <div data-th-each="error : ${#fields.detailedErrors('${clientRegistrationModel.*}')}">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span data-th-text="${error.message}">Dummy error message</span>
+      </div>
+    </div>
+
+    <form method="post" data-th-object="${clientRegistrationModel}">
+      <div class="form-group">
+        <label for="_name">Name</label>
+        <input id="_name" class="form-control" type="text"/>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4  form-group">
+          <label class="control-label">Legal Entity</label>
+          <div>
+            <div class="radio  radio-inline">
+              <input id="_natural-person" class="form-control" type="radio" name="legal-entity"/>
+              <label for="_natural-person">Natural person</label>
+            </div>
+            <div class="radio  radio-inline">
+              <input id="_legal-person" class="form-control" type="radio" name="legal-entity"/>
+              <label for="_legal-person">Legal person</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-8  form-group">
+          <label for="_tax-payer-id">Tax Payer ID</label>
+          <input id="_tax-payer-id" type="text" class="form-control"/>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4  form-group">
+          <label for="_phone">Phone</label>
+          <input id="_phone" type="text" class="form-control"/>
+        </div>
+
+        <div class="col-sm-8  form-group">
+          <label for="_email">E-mail</label>
+          <input id="_email" type="email" class="form-control"/>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4  form-group">
+          <label for="_address">Address</label>
+          <input id="_address" type="text" class="form-control"/>
+        </div>
+
+        <div class="col-sm-4  form-group">
+          <label for="_number">Number</label>
+          <input id="_number" type="text" class="form-control"/>
+        </div>
+
+        <div class="col-sm-4  form-group">
+          <label for="_additional">Additional</label>
+          <input id="_additional" type="text" class="form-control"/>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4  form-group">
+          <label for="_zip-code">Zip code</label>
+          <input id="_zip-code" type="text" class="form-control"/>
+        </div>
+
+        <div class="col-sm-4  form-group">
+          <label for="_state">State</label>
+          <select id="_state" class="form-control">
+            <option value="">Select state</option>
+          </select>
+        </div>
+
+        <div class="col-sm-4  form-group">
+          <label for="_city">City</label>
+          <select id="_city" class="form-control">
+            <option value="">Select city</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn  btn-primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+
+</section>
+</body>
+</html>

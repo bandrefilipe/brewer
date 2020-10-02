@@ -21,7 +21,7 @@
  */
 package io.bandrefilipe.brewer.web.controller;
 
-import io.bandrefilipe.brewer.web.model.BeerRegistrationModel;
+import io.bandrefilipe.brewer.web.model.CityRegistrationModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 
 /**
  * @author bandrefilipe
@@ -41,26 +40,24 @@ import java.util.Arrays;
 @Slf4j
 @Controller
 @RequestMapping(
-        path = Paths.BEER_REGISTRATION,
+        path = Paths.CITY_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class BeerRegistrationController implements IController {
+class CityRegistrationController implements IController {
 
     @GetMapping
-    public ModelAndView getBeerRegistrationPage(final BeerRegistrationModel beerRegistrationModel) {
-        log.debug("input: {}", beerRegistrationModel);
-        final var modelAndView = new ModelAndView(ViewNames.BEER_REGISTRATION);
-        modelAndView.addObject("origins", Arrays.asList("Domestic", "Imported"));
-        return modelAndView;
+    public ModelAndView getCityRegistrationPage(final CityRegistrationModel cityRegistrationModel) {
+        log.debug("input: {}", cityRegistrationModel);
+        return new ModelAndView(ViewNames.CITY_REGISTRATION);
     }
 
     @PostMapping
-    public ModelAndView postBeerRegistrationForm(@Valid final BeerRegistrationModel beerRegistrationModel,
+    public ModelAndView postCityRegistrationForm(@Valid final CityRegistrationModel cityRegistrationModel,
                                                  final BindingResult bindingResult) {
-        log.debug("input: {}", beerRegistrationModel);
+        log.debug("input: {}", cityRegistrationModel);
         if (bindingResult.hasErrors()) {
             log.debug("errors: {}", bindingResult.getAllErrors());
-            return getBeerRegistrationPage(beerRegistrationModel);
+            return getCityRegistrationPage(cityRegistrationModel);
         }
-        return new ModelAndView(redirect(Paths.BEER_REGISTRATION));
+        return new ModelAndView(redirect(Paths.CITY_REGISTRATION));
     }
 }

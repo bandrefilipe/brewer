@@ -21,7 +21,7 @@
  */
 package io.bandrefilipe.brewer.web.config.swagger;
 
-import io.bandrefilipe.brewer.web.controller.ControllerPackageMarker;
+import io.bandrefilipe.brewer.web.controller.IController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +50,6 @@ class RequestHandlerBean {
     @Profile("prod")
     Predicate<RequestHandler> prodRequestHandler() {
         log.debug("Creating bean prodRequestHandler");
-        return RequestHandlerSelectors.basePackage(ControllerPackageMarker.class.getPackageName());
+        return RequestHandlerSelectors.basePackage(IController.class.getPackageName());
     }
 }

@@ -1,26 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default-layout}">
+
+<head>
+  <title>Brewer! - Beer Registration</title>
+</head>
+
 <body>
-<h1>Hello, Thymeleaf!</h1>
+<section layout:fragment="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>Beer Registration</h1>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+
+    <div class="alert  alert-danger" role="alert" data-th-if="${#fields.hasErrors('${beerRegistrationModel.*}')}">
+      <div data-th-each="error : ${#fields.detailedErrors('${beerRegistrationModel.*}')}">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span data-th-text="${error.message}">Dummy error message</span>
+      </div>
+    </div>
+
+    <form method="post" data-th-object="${beerRegistrationModel}">
+      <div class="row">
+        <div class="col-sm-2  form-group">
+          <label for="_sku">SKU</label>
+          <input id="_sku" class="form-control" type="text" data-th-field="*{sku}"/>
+        </div>
+
+        <div class="col-sm-10  form-group">
+          <label for="_name">Name</label>
+          <input id="_name" class="form-control" type="text" data-th-field="*{name}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="_description">Description</label>
+        <textarea id="_description" class="form-control" rows="1" data-th-maxlength="*{descriptionMaxLength}"
+                  data-th-field="*{description}">
+        </textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3  form-group">
+          <label for="_type">Type</label>
+          <div class="bw-field-action">
+            <select id="_type" class="form-control" name="type">
+              <option value="" data-th-disabled="disabled" data-th-selected="selected">Select type...</option>
+              <option data-th-each="type : ${types}" data-th-value="${type.id}"
+                      data-th-text="${type.name}">Dummy type name
+              </option>
+            </select>
+
+            <div class="bw-field-action__icon">
+              <a href="#" data-toggle="modal" data-target="#_beer-type-registration-modal">
+                <span class="glyphicon  glyphicon-plus-sign  bw-glyphicon-large"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-3  form-group">
+          <label for="_flavor">Flavor</label>
+          <select id="_flavor" class="form-control" name="type">
+            <option value="" data-th-disabled="disabled" data-th-selected="selected">Select flavor...</option>
+            <option data-th-each="flavor : ${flavors}" data-th-value="${flavor.id}"
+                    data-th-text="${type.name}">Dummy flavor name
+            </option>
+          </select>
+        </div>
+
+        <div class="col-sm-3  form-group">
+          <label for="_alcohol-content">Alcohol Content</label>
+          <div class="input-group">
+            <input id="_alcohol-content" class="form-control  js-decimal" type="text"
+                   data-th-field="*{alcoholContent}"
+            />
+            <div class="input-group-addon">%</div>
+          </div>
+        </div>
+
+        <div class="col-lg-3  col-sm-6  form-group">
+          <label class="control-label">Origin</label>
+          <div>
+            <!--/*/ <th:block data-th-each="origin : ${origins}"> /*/-->
+              <div class="radio  radio-inline">
+                <input data-th-id="|_origin-${#strings.toLowerCase(origin)}|" type="radio" data-th-value="${origin}"
+                       data-th-field="*{origin}"
+                />
+                <label data-th-for="|_origin-${#strings.toLowerCase(origin)}|" data-th-text="${origin}">
+                  Dummy Label
+                </label>
+              </div>
+            <!--/*/ </th:block> /*/-->
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3  form-group">
+          <label for="_unit-price">Unit Price</label>
+          <div class="input-group">
+            <div class="input-group-addon">$</div>
+            <input id="_unit-price" class="form-control  js-decimal" type="text" data-th-field="*{unitPrice}"/>
+          </div>
+        </div>
+
+        <div class="col-sm-3  form-group">
+          <label for="_commission">Commission</label>
+          <div class="input-group">
+            <input id="_commission" class="form-control  js-decimal" type="text" data-th-field="*{commission}"/>
+            <div class="input-group-addon">%</div>
+          </div>
+        </div>
+
+        <div class="col-sm-3  form-group">
+          <label for="_stock">Stock</label>
+          <input id="_stock" class="form-control  js-integer" type="text" data-th-field="*{stock}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn  btn-primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div data-th-replace="beers/types/type-registration-modal"></div>
+</section>
 </body>
-
-<div data-th-each="error : ${#fields.detailedErrors('${beerRegistrationModel.*}')}">
-    <span data-th-text="${error.message}">Dummy error message</span>
-</div>
-
-<form method="post" data-th-object="${beerRegistrationModel}">
-    <label for="_sku">SKU</label>
-    <input id="_sku" type="text" data-th-field="*{sku}"/>
-    <br>
-
-    <label for="_name">Name</label>
-    <input id="_name" type="text" data-th-field="*{name}"/>
-    <br>
-
-    <label for="_description">Description</label>
-    <textarea id="_description" rows="4" cols="35" data-th-maxlength="*{descriptionMaxLength}" data-th-field="*{description}"></textarea>
-    <br>
-
-    <input type="submit" value="Save">
-</form>
 </html>

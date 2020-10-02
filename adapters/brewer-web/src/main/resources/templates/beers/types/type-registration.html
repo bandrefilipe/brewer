@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default-layout}">
+
+<head>
+  <title>Brewer! - Beer Type Registration</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>Beer Type Registration</h1>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+
+    <div class="alert  alert-danger" role="alert" data-th-if="${#fields.hasErrors('${beerTypeRegistrationModel.*}')}">
+      <div data-th-each="error : ${#fields.detailedErrors('${beerTypeRegistrationModel.*}')}">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span data-th-text="${error.message}">Dummy error message</span>
+      </div>
+    </div>
+
+    <form method="post" data-th-object="${beerTypeRegistrationModel}">
+      <div class="form-group">
+        <label for="_type-name">Name</label>
+        <input id="_type-name" class="form-control" type="text"/>
+      </div>
+
+      <div class="form-group">
+        <button class="btn  btn-primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+
+</section>
+</body>
+</html>
