@@ -61,7 +61,7 @@ class SwaggerConfiguration {
                 .apiInfo(this.apiInfo());
     }
 
-    private ApiInfo apiInfo() {
+    ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title(properties.getTitle())
                 .version(properties.getVersion())
@@ -72,7 +72,7 @@ class SwaggerConfiguration {
                 .build();
     }
 
-    private Contact contact() {
+    Contact contact() {
         return new Contact(
                 properties.getContactName(),
                 properties.getContactUrl(),
