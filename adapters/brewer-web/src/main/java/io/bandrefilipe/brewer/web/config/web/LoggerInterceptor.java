@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class LoggerInterceptor extends HandlerInterceptorAdapter {
+class LoggerInterceptor extends HandlerInterceptorAdapter {
 
     public static final LoggerInterceptor INSTANCE = new LoggerInterceptor();
 
@@ -47,10 +47,14 @@ final class LoggerInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(final HttpServletRequest request,
                              final HttpServletResponse response,
-                             final Object handler) throws Exception {
+                             final Object handler) {
         setRequestMetadata(request);
-        if (log.isInfoEnabled())
-            log.info("[preHandle] {} \"{}\" mapped to {}", request.getMethod(), getRequestURI(request), handler);
+        if (isLogInfoEnabled()) {
+            log.info("[preHandle] {} \"{}\" mapped to {}",
+                    request.getMethod(),
+                    getRequestURI(request),
+                    handler);
+        }
         return true;
     }
 
@@ -58,16 +62,23 @@ final class LoggerInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(final HttpServletRequest request,
                            final HttpServletResponse response,
                            final Object handler,
-                           final ModelAndView modelAndView) throws Exception {
-        if (log.isInfoEnabled())
-            log.info("[postHandle] Completed with status {} in {} ms", getResponseStatus(response), getResponseTimeInMillis(request));
+                           final ModelAndView modelAndView) {
+        if (isLogInfoEnabled()) {
+            log.info("[postHandle] Completed with status {} in {} ms",
+                    getResponseStatus(response),
+                    getResponseTimeInMillis(request));
+        }
     }
 
-    private void setRequestMetadata(final HttpServletRequest request) {
-        request.setAttribute(REQUEST_ATTRIBUTE_TIMESTAMP, System.nanoTime());
+    boolean isLogInfoEnabled() {
+        return log.isInfoEnabled();
     }
 
-    private Object getRequestURI(final HttpServletRequest request) {
+    void setRequestMetadata(final HttpServletRequest request) {
+        request.setAttribute(REQUEST_ATTRIBUTE_TIMESTAMP, currentNanoTime());
+    }
+
+    Object getRequestURI(final HttpServletRequest request) {
         final var requestURI = request.getRequestURI();
         final var queryString = request.getQueryString();
         return queryString != null
@@ -75,13 +86,17 @@ final class LoggerInterceptor extends HandlerInterceptorAdapter {
                 : requestURI;
     }
 
-    private Object getResponseStatus(final HttpServletResponse response) {
+    Object getResponseStatus(final HttpServletResponse response) {
         return HttpStatus.valueOf(response.getStatus());
     }
 
-    private long getResponseTimeInMillis(final HttpServletRequest request) {
-        final var start = (long) request.getAttribute(REQUEST_ATTRIBUTE_TIMESTAMP);
-        final var end = System.nanoTime();
-        return (end - start) / NANO_TO_MILLISECOND_DIVISOR;
+    long getResponseTimeInMillis(final HttpServletRequest request) {
+        final var initialTime = (long) request.getAttribute(REQUEST_ATTRIBUTE_TIMESTAMP);
+        final var terminalTime = currentNanoTime();
+        return (terminalTime - initialTime) / NANO_TO_MILLISECOND_DIVISOR;
+    }
+
+    long currentNanoTime() {
+        return System.nanoTime();
     }
 }
