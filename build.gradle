@@ -15,11 +15,11 @@ ext {
 }
 
 subprojects {
-    group 'io.bandrefilipe'
-    version props.getProperty('app.version')
+    group('io.bandrefilipe')
+    version(props.getProperty('app.version'))
 
-    apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'java-library'
+    apply(plugin: 'io.spring.dependency-management')
+    apply(plugin: 'java-library')
 
     repositories {
         mavenCentral()
@@ -27,14 +27,23 @@ subprojects {
     }
 
     dependencies {
+        // JUnit
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude(group: 'org.junit.vintage', module: 'junit-vintage-engine')
+            exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
+        }
         // Lombok
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
+        compileOnly('org.projectlombok:lombok')
+        annotationProcessor('org.projectlombok:lombok')
     }
 
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
         }
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
