@@ -56,7 +56,7 @@ class LoggerInterceptorTest {
 
         final var $httpServletResponse = mock(HttpServletResponse.class);
 
-        final var $loggerInterceptor = spy(LoggerInterceptor.INSTANCE);
+        final var $loggerInterceptor = spy(LoggerInterceptor.getInstance());
         doNothing().when($loggerInterceptor).setRequestMetadata($httpServletRequest);
         when($loggerInterceptor.isLogInfoEnabled()).thenReturn(true);
         doReturn("/mocked/endpoint").when($loggerInterceptor).getRequestURI($httpServletRequest);
@@ -79,7 +79,7 @@ class LoggerInterceptorTest {
 
         final var $httpServletResponse = mock(HttpServletResponse.class);
 
-        final var $loggerInterceptor = spy(LoggerInterceptor.INSTANCE);
+        final var $loggerInterceptor = spy(LoggerInterceptor.getInstance());
         doNothing().when($loggerInterceptor).setRequestMetadata($httpServletRequest);
         when($loggerInterceptor.isLogInfoEnabled()).thenReturn(false);
 
@@ -101,7 +101,7 @@ class LoggerInterceptorTest {
 
         final var $httpServletResponse = mock(HttpServletResponse.class);
 
-        final var $loggerInterceptor = spy(LoggerInterceptor.INSTANCE);
+        final var $loggerInterceptor = spy(LoggerInterceptor.getInstance());
         when($loggerInterceptor.isLogInfoEnabled()).thenReturn(true);
         doReturn(HttpStatus.OK).when($loggerInterceptor).getResponseStatus($httpServletResponse);
         doReturn(1L).when($loggerInterceptor).getResponseTimeInMillis($httpServletRequest);
@@ -122,7 +122,7 @@ class LoggerInterceptorTest {
 
         final var $httpServletResponse = mock(HttpServletResponse.class);
 
-        final var $loggerInterceptor = spy(LoggerInterceptor.INSTANCE);
+        final var $loggerInterceptor = spy(LoggerInterceptor.getInstance());
         when($loggerInterceptor.isLogInfoEnabled()).thenReturn(false);
 
         // Act
@@ -137,7 +137,7 @@ class LoggerInterceptorTest {
     @Test
     void testSetRequestMetadata() {
         // Arrange
-        final var $loggerInterceptor = spy(LoggerInterceptor.INSTANCE);
+        final var $loggerInterceptor = spy(LoggerInterceptor.getInstance());
         when($loggerInterceptor.currentNanoTime()).thenReturn(1_000_000L);
 
         final var $httpServletRequest = mock(HttpServletRequest.class);
@@ -159,7 +159,7 @@ class LoggerInterceptorTest {
         final var expected = "/mocked/endpoint";
 
         // Act
-        final var actual = LoggerInterceptor.INSTANCE.getRequestURI($httpServletRequest);
+        final var actual = LoggerInterceptor.getInstance().getRequestURI($httpServletRequest);
 
         // Assert
         verify($httpServletRequest, times(1)).getRequestURI();
@@ -177,7 +177,7 @@ class LoggerInterceptorTest {
         final var expected = "/mocked/endpoint?param=value";
 
         // Act
-        final var actual = LoggerInterceptor.INSTANCE.getRequestURI($httpServletRequest);
+        final var actual = LoggerInterceptor.getInstance().getRequestURI($httpServletRequest);
 
         // Assert
         verify($httpServletRequest, times(1)).getRequestURI();
@@ -194,7 +194,7 @@ class LoggerInterceptorTest {
         final var expected = HttpStatus.OK;
 
         // Act
-        final var actual = LoggerInterceptor.INSTANCE.getResponseStatus($httpServletResponse);
+        final var actual = LoggerInterceptor.getInstance().getResponseStatus($httpServletResponse);
 
         // Assert
         verify($httpServletResponse, times(1)).getStatus();
@@ -207,7 +207,7 @@ class LoggerInterceptorTest {
         final var $httpServletRequest = mock(HttpServletRequest.class);
         when($httpServletRequest.getAttribute(contains("request.Timestamp"))).thenReturn(1_000_000L);
 
-        final var $loggerInterceptor = spy(LoggerInterceptor.INSTANCE);
+        final var $loggerInterceptor = spy(LoggerInterceptor.getInstance());
         when($loggerInterceptor.currentNanoTime()).thenReturn(3_000_000L);
 
         final var expected = 2L;
@@ -227,7 +227,7 @@ class LoggerInterceptorTest {
         final var t0 = System.nanoTime();
 
         // Act
-        final var t1 = LoggerInterceptor.INSTANCE.currentNanoTime();
+        final var t1 = LoggerInterceptor.getInstance().currentNanoTime();
 
         // Assert
         assertThat(t1)

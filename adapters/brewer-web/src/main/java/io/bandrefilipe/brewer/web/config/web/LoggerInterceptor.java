@@ -39,7 +39,13 @@ import javax.servlet.http.HttpServletResponse;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class LoggerInterceptor extends HandlerInterceptorAdapter {
 
-    public static final LoggerInterceptor INSTANCE = new LoggerInterceptor();
+    private static final class BillPughSingleton {
+        private static final LoggerInterceptor INSTANCE = new LoggerInterceptor();
+    }
+
+    public static LoggerInterceptor getInstance() {
+        return BillPughSingleton.INSTANCE;
+    }
 
     private static final String REQUEST_ATTRIBUTE_TIMESTAMP = "io.bandrefilipe.brewer.web.request.Timestamp";
     private static final long NANO_TO_MILLISECOND_DIVISOR = 1_000_000L;
