@@ -19,29 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.config.swagger;
+package io.bandrefilipe.brewer.web.config;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
- * Binds custom swagger's api info properties.
- *
  * @author bandrefilipe
  * @since 1.0.0
  */
-@Data
 @Configuration
-@ConfigurationProperties(prefix = "app.swagger.api.info")
-class ApiInfoProperties {
-
-    private String title;
-    private String version;
-    private String description;
-    private String contactName;
-    private String contactUrl;
-    private String contactEmail;
-    private String license;
-    private String licenseUrl;
-}
+@PropertySource("classpath:web.properties")
+class WebProperties {}
