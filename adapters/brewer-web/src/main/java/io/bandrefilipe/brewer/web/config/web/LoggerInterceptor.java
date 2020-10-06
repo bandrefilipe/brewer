@@ -44,7 +44,6 @@ class LoggerInterceptor extends HandlerInterceptorAdapter {
 
     private static final class BillPughSingleton {
         private static final LoggerInterceptor INSTANCE = new LoggerInterceptor();
-
     }
 
     public static LoggerInterceptor getInstance() {

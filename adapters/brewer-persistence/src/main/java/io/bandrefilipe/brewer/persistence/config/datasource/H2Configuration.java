@@ -19,37 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.config.swagger;
+package io.bandrefilipe.brewer.persistence.config.datasource;
 
-import io.bandrefilipe.brewer.web.controller.IController;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.builders.RequestHandlerSelectors;
-
-import java.util.function.Predicate;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@Slf4j
+@Profile("default")
 @Configuration
-class RequestHandlerBean {
-
-    @Bean
-    @Profile("default")
-    Predicate<RequestHandler> defaultRequestHandler() {
-        log.debug("Creating bean defaultRequestHandler");
-        return RequestHandlerSelectors.any();
-    }
-
-    @Bean
-    @Profile("prod")
-    Predicate<RequestHandler> prodRequestHandler() {
-        log.debug("Creating bean prodRequestHandler");
-        return RequestHandlerSelectors.basePackage(IController.class.getPackageName());
-    }
-}
+@PropertySource("classpath:h2.properties")
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+class H2Configuration {}
