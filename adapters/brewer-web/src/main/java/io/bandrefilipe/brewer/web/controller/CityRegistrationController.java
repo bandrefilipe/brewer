@@ -50,7 +50,8 @@ class CityRegistrationController implements IController {
         return new ModelAndView(ViewNames.CITY_REGISTRATION);
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView postCityRegistrationForm(@Valid final CityRegistrationModel cityRegistrationModel,
                                                  final BindingResult bindingResult) {
         log.debug("input: {}", cityRegistrationModel);

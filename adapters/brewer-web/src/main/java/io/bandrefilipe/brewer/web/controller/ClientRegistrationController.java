@@ -50,7 +50,8 @@ class ClientRegistrationController implements IController {
         return new ModelAndView(ViewNames.CLIENT_REGISTRATION);
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView postClientRegistrationForm(@Valid final ClientRegistrationModel clientRegistrationModel,
                                                    final BindingResult bindingResult) {
         log.debug("input: {}", clientRegistrationModel);

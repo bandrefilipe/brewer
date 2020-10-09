@@ -50,7 +50,8 @@ class BeerTypeRegistrationController implements IController {
         return new ModelAndView(ViewNames.BEER_TYPE_REGISTRATION);
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView postBeerTypeRegistrationForm(@Valid final BeerTypeRegistrationModel beerTypeRegistrationModel,
                                                      final BindingResult bindingResult) {
         log.debug("input: {}", beerTypeRegistrationModel);
