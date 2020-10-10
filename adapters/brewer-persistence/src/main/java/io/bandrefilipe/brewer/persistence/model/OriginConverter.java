@@ -21,45 +21,32 @@
  */
 package io.bandrefilipe.brewer.persistence.model;
 
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.AttributeConverter;
+import java.util.Optional;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@Entity
-@Table(name = "beer")
-class BeerEntity {
+@Slf4j
+class OriginConverter implements AttributeConverter<BeerEntity.Origin, String> {
 
-    @Column(name = "origin", length = 1)
-    @Convert(converter = OriginConverter.class)
-    private Origin origin;
+    @Override
+    public String convertToDatabaseColumn(final BeerEntity.Origin attribute) {
+        final var dbData = Optional
+                .ofNullable(attribute)
+                .map(BeerEntity.Origin::getCode)
+                .orElse(null);
+        log.debug("Converting attribute '{}' to database data '{}'", attribute, dbData);
+        return dbData;
+    }
 
-    @Getter
-    enum Origin {
-        DOMESTIC("D"),
-        IMPORTED("I");
-
-        private final String code;
-
-        Origin(final String code) {
-            this.code = code;
-        }
-
-        static Origin getByCode(final String code) {
-            if (code == null) {
-                return null;
-            }
-            switch (code) {
-                case "D": return DOMESTIC;
-                case "I": return IMPORTED;
-                default:  throw new IllegalArgumentException(code);
-            }
-        }
+    @Override
+    public BeerEntity.Origin convertToEntityAttribute(final String dbData) {
+        final var attribute = BeerEntity.Origin.getByCode(dbData);
+        log.debug("Converting database data '{}' to attribute '{}'", dbData, attribute);
+        return attribute;
     }
 }
