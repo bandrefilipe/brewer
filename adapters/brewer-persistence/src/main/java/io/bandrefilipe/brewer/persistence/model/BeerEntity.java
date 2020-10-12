@@ -35,7 +35,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * @author bandrefilipe
@@ -51,7 +57,7 @@ class BeerEntity implements Identifiable<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** The Business Key */
+    /** Business Key */
     @NaturalId
     @Column(name = "sku", unique = true, nullable = false, updatable = false)
     private String sku;
@@ -81,10 +87,15 @@ class BeerEntity implements Identifiable<Long> {
     @Convert(converter = OriginConverter.class)
     private Origin origin;
 
+    @Column(name = "flavor", length = 1)
+    @Convert(converter = FlavorConverter.class)
+    private Flavor flavor;
+
     public String getSimpleNaturalId() {
         return this.getSku();
     }
 
+    @Override
     public int hashCode() {
         return Objects.hashCode(sku);
     }
@@ -94,10 +105,10 @@ class BeerEntity implements Identifiable<Long> {
         if (other == this) {
             return true;
         }
-        if (other == null || this.getClass() != other.getClass()) {
+        if (other == null || other.getClass() != this.getClass()) {
             return false;
         }
-        BeerEntity that = (BeerEntity) other;
+        final var that = (BeerEntity) other;
         return Objects.equals(this.sku, that.sku);
     }
 
@@ -121,6 +132,34 @@ class BeerEntity implements Identifiable<Long> {
                 case "I": return IMPORTED;
                 default:  throw new IllegalArgumentException(code);
             }
+        }
+    }
+
+    @Getter
+    enum Flavor {
+        BITTER("B"),
+        FRUITY("F"),
+        SOFT("S"),
+        STRONG("T"),
+        SWEET("W");
+
+        private static final Map<String, Flavor> FLAVORS_BY_CODE = Stream
+                .of(Flavor.values())
+                .collect(toMap(Flavor::getCode, Function.identity()));
+
+        private final String code;
+
+        Flavor(final String code) {
+            this.code = code;
+        }
+
+        public static Flavor getByCode(final String code) {
+            if (code == null) {
+                return null;
+            }
+            return Optional
+                    .ofNullable(FLAVORS_BY_CODE.get(code))
+                    .orElseThrow(() -> new IllegalArgumentException(code));
         }
     }
 }
