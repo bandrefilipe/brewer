@@ -30,9 +30,11 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -91,6 +93,9 @@ class BeerEntity implements Identifiable<Long> {
     @Convert(converter = FlavorConverter.class)
     private Flavor flavor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private BeerTypeEntity type;
+
     public String getSimpleNaturalId() {
         return this.getSku();
     }
@@ -112,6 +117,10 @@ class BeerEntity implements Identifiable<Long> {
         return Objects.equals(this.sku, that.sku);
     }
 
+    /**
+     * @author bandrefilipe
+     * @since 1.0.0
+     */
     @Getter
     enum Origin {
         DOMESTIC("D"),
@@ -135,6 +144,10 @@ class BeerEntity implements Identifiable<Long> {
         }
     }
 
+    /**
+     * @author bandrefilipe
+     * @since 1.0.0
+     */
     @Getter
     enum Flavor {
         BITTER("B"),
