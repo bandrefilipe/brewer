@@ -51,16 +51,16 @@ class BeerTypeEntity implements Identifiable<Long> {
 
     /** Business Key */
     @NaturalId
-    @Column(name = "name", unique = true, nullable = false, updatable = false)
-    private String name;
+    @Column(name = "type", unique = true, nullable = false, updatable = false)
+    private String type;
 
     public String getSimpleNaturalId() {
-        return this.getName();
+        return this.getType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name);
+        return Objects.hashCode(type);
     }
 
     @Override
@@ -72,6 +72,6 @@ class BeerTypeEntity implements Identifiable<Long> {
             return false;
         }
         final var that = (BeerTypeEntity) other;
-        return Objects.equals(this.name, that.name);
+        return Objects.equals(this.type, that.type);
     }
 }

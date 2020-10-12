@@ -5,7 +5,7 @@ class BeerTypeEntityEqualsAndHashcodeTest extends AbstractEqualsAndHashcodeTest<
     @Override
     BeerTypeEntity newObject() {
         final var entity = new BeerTypeEntity();
-        entity.setName("TEST_NAME");
+        entity.setType("TEST_TYPE");
         return entity;
     }
 }
