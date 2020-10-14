@@ -1,5 +1,9 @@
 rootProject.name = 'brewer'
 
+/* Exposes REST endpoints to consumers of our application.
+ */
+include 'adapters:brewer-api'
+
 /* Implements the persistence layer of our application.
  */
 include 'adapters:brewer-persistence'
