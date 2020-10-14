@@ -19,9 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.config.swagger;
+package io.bandrefilipe.brewer.api.config.swagger;
 
-import io.bandrefilipe.brewer.web.controller.IController;
+import io.bandrefilipe.brewer.api.controller.RestControllerPackageMarker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +50,6 @@ class RequestHandlerBean {
     @Profile("prod")
     Predicate<RequestHandler> prodRequestHandler() {
         log.debug("Creating bean prodRequestHandler");
-        return RequestHandlerSelectors.basePackage(IController.class.getPackageName());
+        return RequestHandlerSelectors.basePackage(RestControllerPackageMarker.class.getPackageName());
     }
 }

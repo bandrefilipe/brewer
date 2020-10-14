@@ -19,32 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.config.swagger;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+package io.bandrefilipe.brewer.api.controller;
 
 /**
  * @author bandrefilipe
  * @since 1.0.0
  */
-@Data
-@Configuration
-@PropertySource("classpath:swagger.properties")
-@ConfigurationProperties(prefix = "swagger.api.info")
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-class SwaggerProperties {
-
-    private String title;
-    private String version;
-    private String description;
-    private String contactName;
-    private String contactUrl;
-    private String contactEmail;
-    private String license;
-    private String licenseUrl;
-}
+public interface RestControllerPackageMarker {}
