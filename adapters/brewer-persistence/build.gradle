@@ -2,6 +2,8 @@ dependencies {
     implementation project(':brewer-application')
     implementation project(':brewer-commons')
 
+    // Flyway :: Core
+    implementation('org.flywaydb:flyway-core')
     // H2
     runtimeOnly('com.h2database:h2')
     // Spring Boot Starter :: Data JPA
