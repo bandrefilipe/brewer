@@ -51,8 +51,8 @@ subprojects {
 
 sonarqube {
     properties {
-        setProperty('sonar.projectKey', 'bandrefilipe_brewer')
-        setProperty('sonar.organization', 'bandrefilipe')
-        setProperty('sonar.host.url', 'https://sonarcloud.io')
+        property 'sonar.projectKey', 'bandrefilipe_brewer'
+        property 'sonar.organization', 'bandrefilipe'
+        property 'sonar.host.url', 'https://sonarcloud.io'
     }
 }
