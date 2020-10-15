@@ -4,7 +4,7 @@ plugins {
     id 'org.sonarqube' version '3.0'
 }
 
-sourceCompatibility = '11'
+sourceCompatibility = JavaVersion.VERSION_11
 
 def props = new Properties()
 file('brewer-configuration/src/main/resources/application.properties').withInputStream {
@@ -51,8 +51,8 @@ subprojects {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "bandrefilipe_brewer"
-        property "sonar.organization", "bandrefilipe"
-        property "sonar.host.url", "https://sonarcloud.io"
+        setProperty('sonar.projectKey', 'bandrefilipe_brewer')
+        setProperty('sonar.organization', 'bandrefilipe')
+        setProperty('sonar.host.url', 'https://sonarcloud.io')
     }
 }
