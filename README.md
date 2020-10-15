@@ -17,7 +17,7 @@ The hexagon is just a fancy way to describe the core of the application that is 
 The application is divided in multiple modules, following the aforementioned hexagonal architecture.
 
 - [brewer-api](./adapters/brewer-api/README.md "brewer-api")
-  > Exposes REST endpoints to consumers of our application.
+  > An adapter that exposes REST endpoints to consumers of our application.
 - [brewer-application](./brewer-application/README.md "brewer-application")
   > Holds classes that make up the core of the application: services that implement use cases which query and modify the domain model
 - [brewer-commons](./brewer-commons/README.md "brewer-commons")
