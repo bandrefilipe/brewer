@@ -46,6 +46,12 @@ subprojects {
         }
     }
 
+    sonarqube {
+        properties {
+            property 'sonar.sources', 'src'
+        }
+    }
+
     test {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
@@ -61,5 +67,6 @@ sonarqube {
         property 'sonar.projectKey', 'bandrefilipe_brewer'
         property 'sonar.organization', 'bandrefilipe'
         property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.sourceEncoding', 'UTF-8'
     }
 }
