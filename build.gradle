@@ -49,7 +49,7 @@ subprojects {
     sonarqube {
         properties {
             property 'sonar.sources', 'src/main/java'
-            property 'sonar.tests', 'src/test/java,src/test/resources'
+            property 'sonar.tests', 'src/test/java'
         }
     }
 
@@ -71,5 +71,23 @@ sonarqube {
         property 'sonar.projectKey', 'bandrefilipe_brewer'
         property 'sonar.projectVersion', props.getProperty('app.version')
         property 'sonar.sourceEncoding', 'UTF-8'
+    }
+}
+
+project(":adapters:brewer-web") {
+    sonarqube {
+        skipProject = true
+    }
+}
+
+project(":brewer-application") {
+    sonarqube {
+        skipProject = true
+    }
+}
+
+project(":brewer-commons") {
+    sonarqube {
+        skipProject = true
     }
 }
