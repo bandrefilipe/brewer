@@ -1,4 +1,16 @@
 # Brewer!
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=bugs)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=code_smells)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=coverage)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=ncloc)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=alert_status)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=security_rating)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=sqale_index)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
+
 A study project based on web software development aimed at practicing a wide range of technologies, libraries, patterns and best practices.
 
 ## Getting Started
@@ -17,7 +29,7 @@ The hexagon is just a fancy way to describe the core of the application that is 
 The application is divided in multiple modules, following the aforementioned hexagonal architecture.
 
 - [brewer-api](./adapters/brewer-api/README.md "brewer-api")
-  > An adapter that exposes REST endpoints to consumers of our application.
+  > An adapter that exposes REST endpoints to consumers of our application
 - [brewer-application](./brewer-application/README.md "brewer-application")
   > Holds classes that make up the core of the application: services that implement use cases which query and modify the domain model
 - [brewer-commons](./brewer-commons/README.md "brewer-commons")
@@ -64,9 +76,11 @@ SOFTWARE.
 
 ## Employed Technology
 
-|<img alt="Java" src="https://www.vectorlogo.zone/logos/java/java-ar21.svg" width="100">|<img alt="Spring Boot" src="https://www.vectorlogo.zone/logos/springio/springio-ar21.svg" width="100">|<img alt="Gradle" src="https://www.vectorlogo.zone/logos/gradle/gradle-ar21.svg" width="100">|
-|:---:|:---:|:---:|
+|<img alt="Java" src="https://www.vectorlogo.zone/logos/java/java-ar21.svg" width="100">|<img alt="Spring Boot" src="https://www.vectorlogo.zone/logos/springio/springio-ar21.svg" width="100">|<img alt="Gradle" src="https://www.vectorlogo.zone/logos/gradle/gradle-ar21.svg" width="100">|<img alt="Docker" src="https://www.vectorlogo.zone/logos/docker/docker-ar21.svg" width="100">|<img alt="SonarCloud" src="https://sonarcloud.io/images/project_badges/sonarcloud-white.svg" width="100">|
+|:---:|:---:|:---:|:---:|:---:|
 
 - [Java 11](https://www.oracle.com/java/ "oracle.com")
 - [Spring Boot 2.3](https://spring.io/projects/spring-boot "spring.io")
 - [Gradle 6.3](https://gradle.org/ "gradle.org")
+- [Docker](https://www.docker.com "docker.com")
+- [SonarCloud](https://sonarcloud.io "sonarcloud.io")
