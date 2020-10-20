@@ -1,0 +1,43 @@
+### THESE SHALL NEVER BE IGNORED ###
+!**/src/main/**
+!**/build.gradle
+!settings.gradle
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Custom ###
+/.github/
+/.gradle/
+**/build/
+/gradle/
+/.dockerignore
+/.gitignore
+/Dockerfile
+/gradlew
+/gradlew.bat
+/LICENSE
+**/README.md
