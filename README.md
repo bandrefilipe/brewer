@@ -1,4 +1,6 @@
 # Brewer!
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/bandrefilipe/brewer)](https://hub.docker.com/r/bandrefilipe/brewer)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/bandrefilipe/brewer?sort=date)](https://hub.docker.com/r/bandrefilipe/brewer)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=bugs)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=code_smells)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bandrefilipe_brewer&metric=coverage)](https://sonarcloud.io/dashboard?id=bandrefilipe_brewer)
