@@ -29,6 +29,10 @@ subprojects {
         jcenter()
     }
 
+    configurations {
+        implementation.exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
+    }
+
     dependencies {
         // JUnit
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
