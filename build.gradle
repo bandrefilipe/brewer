@@ -88,15 +88,3 @@ project(":adapters:brewer-web") {
         skipProject = true
     }
 }
-
-project(":brewer-application") {
-    sonarqube {
-        skipProject = true
-    }
-}
-
-project(":brewer-commons") {
-    sonarqube {
-        skipProject = true
-    }
-}
