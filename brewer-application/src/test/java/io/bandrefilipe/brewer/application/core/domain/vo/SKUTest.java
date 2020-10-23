@@ -24,6 +24,9 @@ package io.bandrefilipe.brewer.application.core.domain.vo;
 import io.bandrefilipe.brewer.application.core.domain.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,5 +69,22 @@ class SKUTest {
     void testToString() {
         assertEquals("null", SKU.valueOf(null).toString());
         assertEquals("ABC123", SKU.valueOf("abc123").toString());
+    }
+
+    @Test
+    void testIdentity() {
+        // Arrange
+        final var valuesBySKU = new HashMap<SKU, String>();
+        asList(
+                SKU.valueOf(null),
+                SKU.valueOf("abc"),
+                SKU.valueOf("   xyz   ")
+        ).forEach(sku -> valuesBySKU.put(sku, sku.getValue()));
+
+        // Act & Assert
+        assertNull(valuesBySKU.get(SKU.valueOf(null)));
+
+        assertEquals("ABC", valuesBySKU.get(SKU.valueOf("  abc  ")));
+        assertEquals("XYZ", valuesBySKU.get(SKU.valueOf("xyz")));
     }
 }

@@ -24,6 +24,9 @@ package io.bandrefilipe.brewer.application.core.domain.vo;
 import io.bandrefilipe.brewer.application.core.domain.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,5 +52,22 @@ class IdTest {
         assertEquals("null", Id.valueOf(null).toString());
         assertEquals("0", Id.valueOf(0L).toString());
         assertEquals("9223372036854775807", Id.valueOf(Long.MAX_VALUE).toString());
+    }
+
+    @Test
+    void testIdentity() {
+        // Arrange
+        final var valuesById = new HashMap<Id, Long>();
+        asList(
+                Id.valueOf(null),
+                Id.valueOf(0L),
+                Id.valueOf(Long.MAX_VALUE)
+        ).forEach(id -> valuesById.put(id, id.getValue()));
+
+        // Act & Assert
+        assertNull(valuesById.get(Id.valueOf(null)));
+
+        assertEquals(0L, valuesById.get(Id.valueOf(0L)));
+        assertEquals(Long.MAX_VALUE, valuesById.get(Id.valueOf(Long.MAX_VALUE)));
     }
 }
