@@ -34,6 +34,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
@@ -52,7 +53,7 @@ import static java.util.stream.Collectors.toMap;
 @Entity
 @Table(name = "beer")
 @NoArgsConstructor @Getter @Setter
-class BeerEntity implements Identifiable<Long> {
+public class BeerEntity implements Identifiable<Long> {
 
     @Id
     @Column(name = "beer")
@@ -94,6 +95,7 @@ class BeerEntity implements Identifiable<Long> {
     private Flavor flavor;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "beer_type_id")
     private BeerTypeEntity type;
 
     public String getSimpleNaturalId() {
