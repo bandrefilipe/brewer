@@ -124,7 +124,7 @@ public class BeerEntity implements Identifiable<Long> {
      * @since 1.0.0
      */
     @Getter
-    enum Origin {
+    public enum Origin {
         DOMESTIC("D"),
         IMPORTED("I");
 
@@ -151,7 +151,7 @@ public class BeerEntity implements Identifiable<Long> {
      * @since 1.0.0
      */
     @Getter
-    enum Flavor {
+    public enum Flavor {
         BITTER("B"),
         FRUITY("F"),
         SOFT("S"),

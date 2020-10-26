@@ -26,8 +26,10 @@ import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.commons.identifier.Identifiable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -37,7 +39,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Builder
 @NoArgsConstructor(access = PRIVATE) @AllArgsConstructor
-@Getter
+@Getter @EqualsAndHashCode @ToString
 public final class Beer implements Identifiable<Id> {
 
     private Id id;
