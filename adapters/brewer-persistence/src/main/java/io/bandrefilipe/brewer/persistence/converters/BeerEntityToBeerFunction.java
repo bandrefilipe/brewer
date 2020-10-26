@@ -38,6 +38,10 @@ import java.util.function.Function;
 @Component
 class BeerEntityToBeerFunction implements Function<BeerEntity, Beer> {
 
+    BeerEntityToBeerFunction() {
+        log.debug("Creating component for class {}", BeerEntityToBeerFunction.class);
+    }
+
     @Override
     public Beer apply(final BeerEntity entity) {
         log.debug("input: {}", entity);

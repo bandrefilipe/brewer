@@ -27,8 +27,9 @@ import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Flavor;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Origin;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
@@ -39,17 +40,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author bandrefilipe
  * @since 1.0.0
  */
-class BeerEntityToBeerFunctionTest {
+@SpringBootTest
+class DefaultConversionFacadeTest {
 
-    private BeerEntityToBeerFunction classUnderTest;
-
-    @BeforeEach
-    void beforeEach() {
-        this.classUnderTest = new BeerEntityToBeerFunction();
-    }
+    @Autowired
+    private DefaultConversionFacade defaultConversionFacade;
 
     @Test
-    void testConversion() {
+    void testConvertToBeer() {
         // Arrange
         final var entity = new BeerEntity();
         entity.setId(1L);
@@ -70,11 +68,11 @@ class BeerEntityToBeerFunctionTest {
                 .build();
 
         // Act
-        final var actual = classUnderTest.apply(entity);
+        final var actual = defaultConversionFacade.convertToBeer(entity);
 
         // Assert
         assertEquals(expected, actual);
 
-        assertThrows(NullPointerException.class, () -> classUnderTest.apply(null));
+        assertThrows(NullPointerException.class, () -> defaultConversionFacade.convertToBeer(null));
     }
 }
