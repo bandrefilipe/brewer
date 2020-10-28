@@ -38,8 +38,16 @@ import java.util.function.Function;
 @Component
 class BeerEntityToBeerFunction implements Function<BeerEntity, Beer> {
 
-    BeerEntityToBeerFunction() {
+    private BeerEntityToBeerFunction() {
         log.debug("Creating component for class {}", BeerEntityToBeerFunction.class);
+    }
+
+    private static class BillPughSingleton {
+        public static final BeerEntityToBeerFunction INSTANCE = new BeerEntityToBeerFunction();
+    }
+
+    public static BeerEntityToBeerFunction getInstance() {
+        return BillPughSingleton.INSTANCE;
     }
 
     @Override

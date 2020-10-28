@@ -28,8 +28,6 @@ import io.bandrefilipe.brewer.persistence.model.BeerEntity;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Flavor;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Origin;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
@@ -40,14 +38,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author bandrefilipe
  * @since 1.0.0
  */
-@SpringBootTest
-class DefaultConversionFacadeTest {
+class BeerEntityToBeerFunctionTest {
 
-    @Autowired
-    private DefaultConversionFacade defaultConversionFacade;
+    private final BeerEntityToBeerFunction functionUnderTest = BeerEntityToBeerFunction.getInstance();
 
     @Test
-    void testConvertToBeer() {
+    void testBeerEntityToBeerFunction() {
         // Arrange
         final var entity = new BeerEntity();
         entity.setId(1L);
@@ -68,11 +64,11 @@ class DefaultConversionFacadeTest {
                 .build();
 
         // Act
-        final var actual = defaultConversionFacade.convertToBeer(entity);
+        final var actual = functionUnderTest.apply(entity);
 
         // Assert
         assertEquals(expected, actual);
 
-        assertThrows(NullPointerException.class, () -> defaultConversionFacade.convertToBeer(null));
+        assertThrows(NullPointerException.class, () -> functionUnderTest.apply(null));
     }
 }
