@@ -35,7 +35,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-22
  */
 @Builder
 @NoArgsConstructor(access = PRIVATE) @AllArgsConstructor

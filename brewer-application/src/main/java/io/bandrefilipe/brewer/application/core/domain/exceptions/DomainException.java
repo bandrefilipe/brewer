@@ -23,7 +23,7 @@ package io.bandrefilipe.brewer.application.core.domain.exceptions;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-22
  */
 public abstract class DomainException extends RuntimeException {
 }

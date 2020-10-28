@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-22
  */
 class SKUTest {
 
