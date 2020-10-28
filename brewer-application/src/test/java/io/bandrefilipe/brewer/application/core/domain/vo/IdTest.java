@@ -70,4 +70,18 @@ class IdTest {
         assertEquals(0, valuesById.get(Id.valueOf(0)));
         assertEquals(Long.MAX_VALUE, valuesById.get(Id.valueOf(Long.MAX_VALUE)));
     }
+
+    @Test
+    void testValueOfNull() {
+        // Arrange
+        final var expected = Id.empty();
+
+        // Act
+        final var actualForNullInteger = Id.valueOf((Integer) null);
+        final var actualForNullLong = Id.valueOf((Long) null);
+
+        // Assert
+        assertEquals(expected, actualForNullInteger);
+        assertEquals(expected, actualForNullLong);
+    }
 }
