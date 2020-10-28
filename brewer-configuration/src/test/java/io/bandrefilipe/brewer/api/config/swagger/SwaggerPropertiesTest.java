@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @since 1.0.0
  */
 @SpringBootTest
-class SwaggerPropertiesIntegrationTest {
+class SwaggerPropertiesTest {
 
     @Autowired
     private SwaggerProperties properties;
