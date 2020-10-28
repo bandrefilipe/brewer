@@ -31,14 +31,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PACKAGE;
 
 /**
  * @author bandrefilipe
  * @since 2020-10-22
  */
 @Builder
-@NoArgsConstructor(access = PRIVATE) @AllArgsConstructor
+@NoArgsConstructor(access = PACKAGE) @AllArgsConstructor(access = PACKAGE)
 @Getter @EqualsAndHashCode @ToString
 public final class Beer implements Identifiable<Id> {
 
