@@ -59,8 +59,8 @@ class DefaultBeerService implements BeerService {
         return findBeerTemplate(sku, beerRepository::retrieveBeer);
     }
 
-    private <I, R> R findBeerTemplate(final I input,
-                                      final Function<I, R> function) {
+    <I, R> R findBeerTemplate(final I input,
+                              final Function<I, R> function) {
         log.debug("input: {}", input);
         final var result = function.apply(input);
         log.debug("result: {}", result);
