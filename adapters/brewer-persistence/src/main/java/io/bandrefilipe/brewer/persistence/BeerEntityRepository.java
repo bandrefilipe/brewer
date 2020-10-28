@@ -28,7 +28,7 @@ import java.util.Optional;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-25
  */
 interface BeerEntityRepository extends JpaRepository<BeerEntity, Long> {
 

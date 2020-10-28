@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * @param <T> The identifier's type.
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-10
  */
 public interface Identifiable<T extends Serializable> {
 

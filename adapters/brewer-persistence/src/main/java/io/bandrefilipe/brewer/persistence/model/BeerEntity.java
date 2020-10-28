@@ -48,7 +48,7 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-10
  */
 @Entity
 @Table(name = "beer")

@@ -26,7 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-07-30
  */
 @Configuration
 @PropertySource("classpath:web.properties")

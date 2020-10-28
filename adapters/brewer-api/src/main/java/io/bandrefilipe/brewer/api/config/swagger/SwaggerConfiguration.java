@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-07-26
  */
 @Configuration
 class SwaggerConfiguration {

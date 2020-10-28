@@ -26,7 +26,7 @@ import io.bandrefilipe.brewer.persistence.model.BeerEntity;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-25
  */
 public interface ConversionFacade {
 

@@ -35,14 +35,14 @@ import javax.validation.Valid;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-09-27
  */
 @Slf4j
 @Controller
 @RequestMapping(
         path = Paths.USER_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class UserRegistrationController implements IController {
+class UserRegistrationController implements BaseMvcController {
 
     @GetMapping
     public ModelAndView getUserRegistrationPage(final UserRegistrationModel userRegistrationModel) {

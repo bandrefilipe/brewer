@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-08-04
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

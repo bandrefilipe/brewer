@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-07-26
  */
 class SwaggerConfigurationTest {
 

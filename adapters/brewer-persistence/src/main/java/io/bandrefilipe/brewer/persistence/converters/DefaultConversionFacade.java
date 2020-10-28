@@ -31,7 +31,7 @@ import java.util.function.Function;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-25
  */
 @Slf4j
 @Component

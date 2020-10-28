@@ -37,7 +37,7 @@ import java.util.Objects;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-12
  */
 @Entity
 @Table(name = "beer_type")

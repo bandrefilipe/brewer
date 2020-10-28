@@ -27,10 +27,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-08-04
  */
 @Configuration
-class WebConfig implements WebMvcConfigurer {
+class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {

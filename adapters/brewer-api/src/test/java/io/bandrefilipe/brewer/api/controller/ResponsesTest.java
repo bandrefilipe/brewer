@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-22
  */
 class ResponsesTest {
 

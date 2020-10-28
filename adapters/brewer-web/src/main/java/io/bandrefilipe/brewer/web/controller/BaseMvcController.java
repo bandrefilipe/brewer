@@ -23,9 +23,9 @@ package io.bandrefilipe.brewer.web.controller;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-08-22
  */
-public interface IController {
+public interface BaseMvcController {
 
     default String redirect(String path) {
         return "redirect:" + path;

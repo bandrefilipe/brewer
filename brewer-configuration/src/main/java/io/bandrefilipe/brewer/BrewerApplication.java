@@ -26,7 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-07-26
  */
 @SpringBootApplication
 class BrewerApplication {

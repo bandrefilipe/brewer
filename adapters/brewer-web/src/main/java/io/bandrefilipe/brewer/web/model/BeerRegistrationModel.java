@@ -37,7 +37,7 @@ import java.math.BigDecimal;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-08-15
  */
 @Data
 @NoArgsConstructor

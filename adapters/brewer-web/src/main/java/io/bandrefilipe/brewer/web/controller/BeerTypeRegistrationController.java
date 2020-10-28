@@ -35,14 +35,14 @@ import javax.validation.Valid;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-02
  */
 @Slf4j
 @Controller
 @RequestMapping(
         path = Paths.BEER_TYPE_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class BeerTypeRegistrationController implements IController {
+class BeerTypeRegistrationController implements BaseMvcController {
 
     @GetMapping
     public ModelAndView getBeerTypeRegistrationPage(final BeerTypeRegistrationModel beerTypeRegistrationModel) {
