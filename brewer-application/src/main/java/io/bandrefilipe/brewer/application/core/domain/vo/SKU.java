@@ -55,6 +55,10 @@ public final class SKU {
         log.debug("SKU \"{}\" constructed", this);
     }
 
+    public static SKU empty() {
+        return new SKU(null);
+    }
+
     public static SKU valueOf(final String sku) {
         return new SKU(sku);
     }

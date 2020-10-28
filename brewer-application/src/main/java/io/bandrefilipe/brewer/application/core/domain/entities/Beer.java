@@ -42,6 +42,9 @@ import static lombok.AccessLevel.PACKAGE;
 @Getter @EqualsAndHashCode @ToString
 public final class Beer implements Identifiable<Id> {
 
-    private Id id;
-    private SKU sku;
+    @Builder.Default
+    private final Id id = Id.empty();
+
+    @Builder.Default
+    private final SKU sku = SKU.empty();
 }
