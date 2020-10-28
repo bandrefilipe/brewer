@@ -39,18 +39,18 @@ class IdTest {
 
     @Test
     void testValueOf() {
-        assertNull(Id.valueOf(null).getValue());
+        assertNull(Id.empty().getValue());
 
-        assertEquals(Long.valueOf(0L), Id.valueOf(0L).getValue());
+        assertEquals(Long.valueOf(0), Id.valueOf(0).getValue());
         assertEquals(Long.valueOf(Long.MAX_VALUE), Id.valueOf(Long.MAX_VALUE).getValue());
 
-        assertThrows(ParseException.class, () -> Id.valueOf(-1L));
+        assertThrows(ParseException.class, () -> Id.valueOf(-1));
     }
 
     @Test
     void testToString() {
-        assertEquals("null", Id.valueOf(null).toString());
-        assertEquals("0", Id.valueOf(0L).toString());
+        assertEquals("null", Id.empty().toString());
+        assertEquals("0", Id.valueOf(0).toString());
         assertEquals("9223372036854775807", Id.valueOf(Long.MAX_VALUE).toString());
     }
 
@@ -59,15 +59,15 @@ class IdTest {
         // Arrange
         final var valuesById = new HashMap<Id, Long>();
         asList(
-                Id.valueOf(null),
-                Id.valueOf(0L),
+                Id.empty(),
+                Id.valueOf(0),
                 Id.valueOf(Long.MAX_VALUE)
         ).forEach(id -> valuesById.put(id, id.getValue()));
 
         // Act & Assert
-        assertNull(valuesById.get(Id.valueOf(null)));
+        assertNull(valuesById.get(Id.empty()));
 
-        assertEquals(0L, valuesById.get(Id.valueOf(0L)));
+        assertEquals(0, valuesById.get(Id.valueOf(0)));
         assertEquals(Long.MAX_VALUE, valuesById.get(Id.valueOf(Long.MAX_VALUE)));
     }
 }

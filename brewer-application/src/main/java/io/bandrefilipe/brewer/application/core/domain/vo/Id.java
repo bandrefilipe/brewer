@@ -50,6 +50,17 @@ public final class Id implements Serializable {
         log.debug("Id \"{}\" constructed", this);
     }
 
+    public static Id empty() {
+        return new Id(null);
+    }
+
+    public static Id valueOf(final Integer id) {
+        if (id == null) {
+            return Id.empty();
+        }
+        return new Id(Long.valueOf(id));
+    }
+
     public static Id valueOf(final Long id) {
         return new Id(id);
     }
