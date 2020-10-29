@@ -44,7 +44,7 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping(
-        path = "/api/v1/beers",
+        path = ApiVersion.V1 + "/beers",
         produces = MediaType.APPLICATION_JSON_VALUE)
 class BeerController {
 
