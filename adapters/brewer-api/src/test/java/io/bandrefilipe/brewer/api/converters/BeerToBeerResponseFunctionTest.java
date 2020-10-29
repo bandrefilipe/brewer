@@ -19,34 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.persistence.converters;
+package io.bandrefilipe.brewer.api.converters;
 
+import io.bandrefilipe.brewer.api.model.BeerResponse;
 import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
-import io.bandrefilipe.brewer.persistence.model.BeerEntity;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import io.bandrefilipe.brewer.application.core.domain.vo.Id;
+import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
+import org.junit.jupiter.api.Test;
 
-import java.util.function.Function;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author bandrefilipe
- * @since 2020-10-25
+ * @since 2020-10-29
  */
-@Slf4j
-@Component
-class DefaultConversionFacade implements ConversionFacade {
+class BeerToBeerResponseFunctionTest {
 
-    private final Function<BeerEntity, Beer> beerEntityToBeerFunction;
+    private final BeerToBeerResponseFunction functionUnderTest = BeerToBeerResponseFunction.getInstance();
 
-    @Autowired
-    DefaultConversionFacade(final Function<BeerEntity, Beer> beerEntityToBeerFunction) {
-        log.debug("Creating component for class {}", DefaultConversionFacade.class);
-        this.beerEntityToBeerFunction = beerEntityToBeerFunction;
-    }
+    @Test
+    void testBeerToBeerResponseFunction() {
+        // Arrange
+        final var input = Beer
+                .builder()
+                .id(Id.valueOf(123))
+                .sku(SKU.valueOf("TEST_SKU"))
+                .build();
 
-    @Override
-    public Beer convertToBeer(final BeerEntity entity) {
-        return beerEntityToBeerFunction.apply(entity);
+        final var expected = BeerResponse
+                .builder()
+                .id(123L)
+                .sku("TEST_SKU")
+                .build();
+
+        // Act
+        final var actual = functionUnderTest.apply(input);
+
+        // Assert
+        assertEquals(expected, actual);
     }
 }

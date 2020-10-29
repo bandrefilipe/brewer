@@ -21,7 +21,8 @@
  */
 package io.bandrefilipe.brewer.api.controller;
 
-import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
+import io.bandrefilipe.brewer.api.converters.ConversionFacade;
+import io.bandrefilipe.brewer.api.model.BeerResponse;
 import io.bandrefilipe.brewer.application.core.domain.vo.Id;
 import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.application.ports.in.BeerService;
@@ -48,31 +49,36 @@ import java.util.Optional;
         produces = MediaType.APPLICATION_JSON_VALUE)
 class BeerController {
 
+    private final ConversionFacade conversionFacade;
     private final BeerService beerService;
 
     @Autowired
-    BeerController(final BeerService beerService) {
+    BeerController(final ConversionFacade conversionFacade,
+                   final BeerService beerService) {
+        this.conversionFacade = conversionFacade;
         this.beerService = beerService;
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Beer> getBeerById(@PathVariable final Long id) {
+    public ResponseEntity<BeerResponse> getBeerById(@PathVariable final Long id) {
         log.debug("input: {}", id);
         return Optional
                 .ofNullable(id)
                 .map(Id::valueOf)
                 .flatMap(beerService::findBeer)
+                .map(conversionFacade::convertToBeerResponse)
                 .map(Responses::ok)
                 .orElseGet(Responses::notFound);
     }
 
     @GetMapping
-    public ResponseEntity<Beer> getBeerBySku(@RequestParam final String sku) {
+    public ResponseEntity<BeerResponse> getBeerBySku(@RequestParam final String sku) {
         log.debug("input: {}", sku);
         return Optional
                 .ofNullable(sku)
                 .map(SKU::valueOf)
                 .flatMap(beerService::findBeer)
+                .map(conversionFacade::convertToBeerResponse)
                 .map(Responses::ok)
                 .orElseGet(Responses::noContent);
     }

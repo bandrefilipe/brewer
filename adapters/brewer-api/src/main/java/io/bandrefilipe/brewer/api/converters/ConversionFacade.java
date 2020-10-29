@@ -19,36 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.persistence.converters;
+package io.bandrefilipe.brewer.api.converters;
 
-import io.bandrefilipe.brewer.persistence.model.BeerEntity;
-import org.junit.jupiter.api.Test;
-
-import java.util.function.Function;
-
-import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import io.bandrefilipe.brewer.api.model.BeerResponse;
+import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
+import org.springframework.lang.NonNull;
 
 /**
  * @author bandrefilipe
- * @since 2020-10-28
+ * @since 2020-10-29
  */
-class DefaultConversionFacadeTest {
+public interface ConversionFacade {
 
-    @Test
-    void testConvertToBeer() {
-        // Arrange
-        final var $beerEntityToBeerFunction = mock(Function.class);
-        final var $defaultConversionFacade = spy(new DefaultConversionFacade($beerEntityToBeerFunction));
-        final var input = new BeerEntity();
-
-        // Act
-        $defaultConversionFacade.convertToBeer(input);
-
-        // Assert
-        verify($beerEntityToBeerFunction, times(1)).apply(same(input));
-    }
+    BeerResponse convertToBeerResponse(@NonNull Beer beer);
 }

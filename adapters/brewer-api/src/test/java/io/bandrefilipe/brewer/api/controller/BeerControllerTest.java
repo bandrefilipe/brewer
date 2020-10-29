@@ -21,6 +21,8 @@
  */
 package io.bandrefilipe.brewer.api.controller;
 
+import io.bandrefilipe.brewer.api.converters.ConversionFacade;
+import io.bandrefilipe.brewer.api.model.BeerResponse;
 import io.bandrefilipe.brewer.application.core.domain.entities.BeerFactory;
 import io.bandrefilipe.brewer.application.core.domain.vo.Id;
 import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
@@ -33,8 +35,12 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author bandrefilipe
@@ -42,15 +48,20 @@ import static org.mockito.Mockito.mock;
  */
 class BeerControllerTest {
 
+    private ConversionFacade $conversionFacade;
     private BeerService $beerService;
 
     private BeerController classUnderTest;
 
     @BeforeEach
     void beforeEach() {
+        this.$conversionFacade = mock(ConversionFacade.class);
         this.$beerService = mock(BeerService.class);
 
-        this.classUnderTest = new BeerController($beerService);
+        this.classUnderTest = new BeerController(
+                $conversionFacade,
+                $beerService
+        );
     }
 
     @Test
@@ -59,13 +70,19 @@ class BeerControllerTest {
         doReturn(Optional.of(BeerFactory.newBeer()))
                 .when($beerService).findBeer(any(Id.class));
 
-        final var expected = ResponseEntity.ok(BeerFactory.newBeer());
+        doReturn(new BeerResponse())
+                .when($conversionFacade).convertToBeerResponse(eq(BeerFactory.newBeer()));
+
+        final var expected = ResponseEntity.ok(new BeerResponse());
 
         // Act
         final var actual = classUnderTest.getBeerById(123L);
 
         // Assert
         assertEquals(expected, actual);
+
+        verify($beerService, times(1)).findBeer(eq(Id.valueOf(123)));
+        verify($conversionFacade, times(1)).convertToBeerResponse(eq(BeerFactory.newBeer()));
     }
 
     @Test
@@ -81,6 +98,9 @@ class BeerControllerTest {
 
         // Arrange
         assertEquals(expected, actual);
+
+        verify($beerService, times(1)).findBeer(eq(Id.valueOf(123)));
+        verify($conversionFacade, never()).convertToBeerResponse(any());
     }
 
     @Test
@@ -89,13 +109,19 @@ class BeerControllerTest {
         doReturn(Optional.of(BeerFactory.newBeer()))
                 .when($beerService).findBeer(any(SKU.class));
 
-        final var expected = ResponseEntity.ok(BeerFactory.newBeer());
+        doReturn(new BeerResponse())
+                .when($conversionFacade).convertToBeerResponse(eq(BeerFactory.newBeer()));
+
+        final var expected = ResponseEntity.ok(new BeerResponse());
 
         // Act
         final var actual = classUnderTest.getBeerBySku("TEST_SKU");
 
         // Assert
         assertEquals(expected, actual);
+
+        verify($beerService, times(1)).findBeer(eq(SKU.valueOf("TEST_SKU")));
+        verify($conversionFacade, times(1)).convertToBeerResponse(eq(BeerFactory.newBeer()));
     }
 
     @Test
@@ -111,5 +137,8 @@ class BeerControllerTest {
 
         // Arrange
         assertEquals(expected, actual);
+
+        verify($beerService, times(1)).findBeer(eq(SKU.valueOf("TEST_SKU")));
+        verify($conversionFacade, never()).convertToBeerResponse(any());
     }
 }
