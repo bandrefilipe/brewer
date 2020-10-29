@@ -51,7 +51,7 @@ class BeerController {
     private final BeerService beerService;
 
     @Autowired
-    private BeerController(final BeerService beerService) {
+    BeerController(final BeerService beerService) {
         this.beerService = beerService;
     }
 
