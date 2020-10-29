@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @param <T> The type of object under test.
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-10
  */
 abstract class AbstractEqualsAndHashcodeTest<T> {
 

@@ -10,7 +10,5 @@ dependencies {
     implementation project(':brewer-commons')
 
     // Spring Boot Starter
-    implementation('org.springframework.boot:spring-boot-starter') {
-        exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
-    }
+    implementation('org.springframework.boot:spring-boot-starter')
 }

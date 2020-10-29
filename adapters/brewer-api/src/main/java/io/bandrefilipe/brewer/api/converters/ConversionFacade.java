@@ -19,15 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.controller;
+package io.bandrefilipe.brewer.api.converters;
+
+import io.bandrefilipe.brewer.api.model.BeerResponse;
+import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
+import org.springframework.lang.NonNull;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-29
  */
-public interface IController {
+public interface ConversionFacade {
 
-    default String redirect(String path) {
-        return "redirect:" + path;
-    }
+    BeerResponse convertToBeerResponse(@NonNull Beer beer);
 }

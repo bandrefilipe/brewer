@@ -19,21 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.web.config.web;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+package io.bandrefilipe.brewer.application.core.domain.exceptions;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-22
  */
-@Configuration
-class WebConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(LoggerInterceptor.getInstance());
-    }
+public abstract class DomainException extends RuntimeException {
 }

@@ -36,14 +36,14 @@ import java.util.Arrays;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-08-15
  */
 @Slf4j
 @Controller
 @RequestMapping(
         path = Paths.BEER_REGISTRATION,
         produces = MediaType.TEXT_HTML_VALUE)
-class BeerRegistrationController implements IController {
+class BeerRegistrationController implements BaseMvcController {
 
     @GetMapping
     public ModelAndView getBeerRegistrationPage(final BeerRegistrationModel beerRegistrationModel) {

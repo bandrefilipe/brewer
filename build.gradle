@@ -29,6 +29,10 @@ subprojects {
         jcenter()
     }
 
+    configurations {
+        implementation.exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
+    }
+
     dependencies {
         // JUnit
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -80,18 +84,6 @@ sonarqube {
 }
 
 project(":adapters:brewer-web") {
-    sonarqube {
-        skipProject = true
-    }
-}
-
-project(":brewer-application") {
-    sonarqube {
-        skipProject = true
-    }
-}
-
-project(":brewer-commons") {
     sonarqube {
         skipProject = true
     }

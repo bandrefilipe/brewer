@@ -28,7 +28,7 @@ import java.util.Optional;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-12
  */
 @Slf4j
 class FlavorConverter implements AttributeConverter<BeerEntity.Flavor, String> {

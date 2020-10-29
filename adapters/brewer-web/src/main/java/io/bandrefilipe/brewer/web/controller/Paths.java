@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-08-15
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class Paths {

@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author bandrefilipe
- * @since 1.0.0
+ * @since 2020-10-09
  */
 @SpringBootTest
 class DatasourceConfigurationTest {
