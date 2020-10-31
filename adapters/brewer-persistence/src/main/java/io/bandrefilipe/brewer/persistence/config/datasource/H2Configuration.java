@@ -31,7 +31,7 @@ import org.springframework.context.annotation.PropertySource;
  * @author bandrefilipe
  * @since 2020-10-05
  */
-@Profile("default")
+@Profile("default | test")
 @Configuration
 @PropertySource("classpath:h2.properties")
 @NoArgsConstructor(access = AccessLevel.PACKAGE)

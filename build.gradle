@@ -60,6 +60,9 @@ subprojects {
     }
 
     test {
+        setJvmArgs([
+                '-Dspring.profiles.active=test'
+        ])
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
     }
