@@ -76,7 +76,7 @@ class BeerRetrievalBySkuTest extends AbstractRestAPITest {
         assertEquals(expectedResponseStatus, actualResponse.getStatusCode());
     }
 
-    @Disabled @Test
+    @Disabled("Implementation pending") @Test
     void testResponseBadRequest() {
         // Arrange
         final var requestEntity = RequestEntity
