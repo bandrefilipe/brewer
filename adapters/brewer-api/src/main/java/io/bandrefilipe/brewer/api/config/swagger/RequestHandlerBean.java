@@ -40,7 +40,7 @@ import java.util.function.Predicate;
 class RequestHandlerBean {
 
     @Bean
-    @Profile("default")
+    @Profile("default | test")
     Predicate<RequestHandler> defaultRequestHandler() {
         log.debug("Creating bean defaultRequestHandler");
         return RequestHandlerSelectors.any();

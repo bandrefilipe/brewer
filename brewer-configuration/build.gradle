@@ -11,4 +11,7 @@ dependencies {
 
     // Spring Boot Starter
     implementation('org.springframework.boot:spring-boot-starter')
+
+    // Spring Boot Starter :: Web
+    testImplementation('org.springframework.boot:spring-boot-starter-web')
 }
