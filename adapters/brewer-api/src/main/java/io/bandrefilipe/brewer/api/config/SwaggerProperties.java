@@ -19,33 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.api.config.swagger;
+package io.bandrefilipe.brewer.api.config;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * @author bandrefilipe
- * @since 2020-10-04
+ * @since 2020-07-26
  */
-@SpringBootTest
-class SwaggerPropertiesTest {
+@Data
+@Configuration
+@PropertySource("classpath:swagger.properties")
+@ConfigurationProperties(prefix = "swagger.api.info")
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
+class SwaggerProperties {
 
-    @Autowired
-    private SwaggerProperties properties;
-
-    @Test
-    void testPropertiesForNonNullity() {
-        assertNotNull(properties.getTitle(), "Title is missing");
-        assertNotNull(properties.getVersion(), "Version is missing");
-        assertNotNull(properties.getDescription(), "Description is missing");
-        assertNotNull(properties.getContactName(), "Contact Name is missing");
-        assertNotNull(properties.getContactUrl(), "Contact URL is missing");
-        assertNotNull(properties.getContactEmail(), "Contact E-mail is missing");
-        assertNotNull(properties.getLicense(), "License is missing");
-        assertNotNull(properties.getLicenseUrl(), "License URL is missing");
-    }
+    private String title;
+    private String version;
+    private String description;
+    private String contactName;
+    private String contactUrl;
+    private String contactEmail;
+    private String license;
+    private String licenseUrl;
 }

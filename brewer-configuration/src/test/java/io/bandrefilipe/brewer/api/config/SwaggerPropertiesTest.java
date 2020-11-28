@@ -19,37 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.api.config.swagger;
+package io.bandrefilipe.brewer.api.config;
 
-import io.bandrefilipe.brewer.api.controller.RestControllerPackageMarker;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.builders.RequestHandlerSelectors;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.function.Predicate;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author bandrefilipe
- * @since 2020-07-26
+ * @since 2020-10-04
  */
-@Slf4j
-@Configuration
-class RequestHandlerBean {
+@SpringBootTest
+class SwaggerPropertiesTest {
 
-    @Bean
-    @Profile("default | test")
-    Predicate<RequestHandler> defaultRequestHandler() {
-        log.debug("Creating bean defaultRequestHandler");
-        return RequestHandlerSelectors.any();
-    }
+    @Autowired
+    private SwaggerProperties properties;
 
-    @Bean
-    @Profile("prod")
-    Predicate<RequestHandler> prodRequestHandler() {
-        log.debug("Creating bean prodRequestHandler");
-        return RequestHandlerSelectors.basePackage(RestControllerPackageMarker.class.getPackageName());
+    @Test
+    void testPropertiesForNonNullity() {
+        assertNotNull(properties.getTitle(), "Title is missing");
+        assertNotNull(properties.getVersion(), "Version is missing");
+        assertNotNull(properties.getDescription(), "Description is missing");
+        assertNotNull(properties.getContactName(), "Contact Name is missing");
+        assertNotNull(properties.getContactUrl(), "Contact URL is missing");
+        assertNotNull(properties.getContactEmail(), "Contact E-mail is missing");
+        assertNotNull(properties.getLicense(), "License is missing");
+        assertNotNull(properties.getLicenseUrl(), "License URL is missing");
     }
 }

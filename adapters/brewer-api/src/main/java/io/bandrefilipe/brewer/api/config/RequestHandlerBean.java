@@ -19,32 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.api.config.swagger;
+package io.bandrefilipe.brewer.api.config;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import io.bandrefilipe.brewer.api.controller.RestControllerPackageMarker;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Profile;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.builders.RequestHandlerSelectors;
+
+import java.util.function.Predicate;
 
 /**
  * @author bandrefilipe
  * @since 2020-07-26
  */
-@Data
+@Slf4j
 @Configuration
-@PropertySource("classpath:swagger.properties")
-@ConfigurationProperties(prefix = "swagger.api.info")
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-class SwaggerProperties {
+class RequestHandlerBean {
 
-    private String title;
-    private String version;
-    private String description;
-    private String contactName;
-    private String contactUrl;
-    private String contactEmail;
-    private String license;
-    private String licenseUrl;
+    @Bean
+    @Profile("default | test")
+    Predicate<RequestHandler> defaultRequestHandler() {
+        log.debug("Creating bean defaultRequestHandler");
+        return RequestHandlerSelectors.any();
+    }
+
+    @Bean
+    @Profile("prod")
+    Predicate<RequestHandler> prodRequestHandler() {
+        log.debug("Creating bean prodRequestHandler");
+        return RequestHandlerSelectors.basePackage(RestControllerPackageMarker.class.getPackageName());
+    }
 }
