@@ -38,6 +38,7 @@ The application is divided in multiple modules, following the aforementioned hex
 - [How to implement Equals and HashCode for JPA entities](https://vladmihalcea.com/hibernate-facts-equals-and-hashcode/ "vladmihalcea.com")
 - [How to implement equals and hashCode using the JPA entity identifier (Primary Key)](https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/ "vladmihalcea.com")
 - [The best way to map a @NaturalId business key with JPA and Hibernate](https://vladmihalcea.com/the-best-way-to-map-a-naturalid-business-key-with-jpa-and-hibernate/ "vladmihalcea.com")
+- [7 Popular Unit Test Naming Conventions](https://dzone.com/articles/7-popular-unit-test-naming "dzone.com")
 
 ## License
 ```
@@ -70,6 +71,7 @@ SOFTWARE.
 |:---:|:---:|:---:|:---:|:---:|
 
 - [Java 11](https://www.oracle.com/java/ "oracle.com")
+- [JUnit 5](https://junit.org/junit5/ "junit.org")
 - [Spring Boot 2.3](https://spring.io/projects/spring-boot "spring.io")
 - [Gradle 6.3](https://gradle.org/ "gradle.org")
 - [Docker](https://www.docker.com "docker.com")
