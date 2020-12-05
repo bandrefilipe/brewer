@@ -21,10 +21,13 @@
  */
 package io.bandrefilipe.brewer.api.config;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import springfox.documentation.spi.DocumentationType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -37,60 +40,89 @@ import static org.mockito.Mockito.when;
  */
 class SwaggerConfigurationTest {
 
-    @Test
-    void testDocketCreation() {
-        // Arrange
-        final var $swaggerProperties = mock(SwaggerProperties.class);
-        final var $swaggerConfiguration = spy(new SwaggerConfiguration(t -> true, $swaggerProperties));
+    private SwaggerProperties mockedSwaggerProperties;
+    private SwaggerConfiguration objectUnderTest;
 
-        // Act
-        final var actual = $swaggerConfiguration.docket();
+    @BeforeEach
+    void setup() {
+        mockedSwaggerProperties = mock(SwaggerProperties.class);
+        objectUnderTest = spy(new SwaggerConfiguration(t -> true, mockedSwaggerProperties));
+        setupSwaggerProperties();
+    }
 
-        // Assert
-        assertNotNull(actual, "Docket is missing");
-        verify($swaggerConfiguration, times(1)).apiInfo();
+    private void setupSwaggerProperties() {
+        when(mockedSwaggerProperties.getTitle()).thenReturn("Mocked Title");
+        when(mockedSwaggerProperties.getVersion()).thenReturn("Mocked Version");
+        when(mockedSwaggerProperties.getDescription()).thenReturn("Mocked Description");
+        when(mockedSwaggerProperties.getContactName()).thenReturn("Mocked Contact Name");
+        when(mockedSwaggerProperties.getContactUrl()).thenReturn("Mocked Contact URL");
+        when(mockedSwaggerProperties.getContactEmail()).thenReturn("Mocked Contact Email");
+        when(mockedSwaggerProperties.getLicense()).thenReturn("Mocked License");
+        when(mockedSwaggerProperties.getLicenseUrl()).thenReturn("Mocked License URL");
     }
 
     @Test
-    void testApiInfoCreation() {
-        // Arrange
-        final var $swaggerProperties = mock(SwaggerProperties.class);
-        when($swaggerProperties.getTitle()).thenReturn("Mocked Title");
-        when($swaggerProperties.getVersion()).thenReturn("Mocked Version");
-        when($swaggerProperties.getDescription()).thenReturn("Mocked Description");
-        when($swaggerProperties.getLicense()).thenReturn("Mocked License");
-        when($swaggerProperties.getLicenseUrl()).thenReturn("Mocked License URL");
-
-        final var $swaggerConfiguration = spy(new SwaggerConfiguration(null, $swaggerProperties));
-
-        // Act
-        final var actual = $swaggerConfiguration.apiInfo();
-
-        // Assert
-        assertEquals("Mocked Title", actual.getTitle(), "Wrong Title");
-        assertEquals("Mocked Version", actual.getVersion(), "Wrong Version");
-        assertEquals("Mocked Description", actual.getDescription(), "Wrong Description");
-        assertEquals("Mocked License", actual.getLicense(), "Wrong License");
-        assertEquals("Mocked License URL", actual.getLicenseUrl(), "Wrong License URL");
-        verify($swaggerConfiguration, times(1)).contact();
+    void docketMustNotBeNull() {
+        assertNotNull(objectUnderTest.docket());
     }
 
     @Test
-    void testContactCreation() {
-        // Arrange
-        final var $swaggerProperties = mock(SwaggerProperties.class);
-        when($swaggerProperties.getContactName()).thenReturn("Mocked Contact Name");
-        when($swaggerProperties.getContactUrl()).thenReturn("Mocked Contact URL");
-        when($swaggerProperties.getContactEmail()).thenReturn("Mocked Contact Email");
+    void documentationTypeMustBeOAS30() {
+        final var expected = DocumentationType.OAS_30;
+        final var actual = objectUnderTest.docket().getDocumentationType();
+        assertEquals(expected, actual);
+    }
 
-        final var swaggerConfiguration = new SwaggerConfiguration(null, $swaggerProperties);
+    @Test
+    void apiInfoMustBeCalledOnyOnce() {
+        objectUnderTest.docket();
+        verify(objectUnderTest, times(1)).apiInfo();
+    }
 
-        // Act
-        final var actual = swaggerConfiguration.contact();
+    @Test
+    void apiInfoMustNotBeNull() {
+        assertNotNull(objectUnderTest.apiInfo());
+    }
 
-        // Assert
-        assertEquals("Mocked Contact Name", actual.getName(), "Wrong Name");
-        assertEquals("Mocked Contact URL", actual.getUrl(), "Wrong URL");
-        assertEquals("Mocked Contact Email", actual.getEmail(), "Wrong Email");
+    @Test
+    void apiInfoMustUsePropertiesData() {
+        final var actual = objectUnderTest.apiInfo();
+        assertEquals("Mocked Title", actual.getTitle());
+        assertEquals("Mocked Version", actual.getVersion());
+        assertEquals("Mocked Description", actual.getDescription());
+        assertEquals("Mocked License", actual.getLicense());
+        assertEquals("Mocked License URL", actual.getLicenseUrl());
+    }
+
+    @Test
+    void contactMustBeCalledOnlyOnce() {
+        objectUnderTest.docket();
+        verify(objectUnderTest, times(1)).contact();
+    }
+
+    @Test
+    void contactMustNotBeNull() {
+        assertNotNull(objectUnderTest.contact());
+    }
+
+    @Test
+    void contactMustUsePropertiesData() {
+        final var actual = objectUnderTest.contact();
+        assertEquals("Mocked Contact Name", actual.getName());
+        assertEquals("Mocked Contact URL", actual.getUrl());
+        assertEquals("Mocked Contact Email", actual.getEmail());
+    }
+
+    @Test
+    void allPropertiesMethodsMustBeCalledAtLeastOnce() {
+        objectUnderTest.docket();
+        verify(mockedSwaggerProperties, atLeastOnce()).getTitle();
+        verify(mockedSwaggerProperties, atLeastOnce()).getVersion();
+        verify(mockedSwaggerProperties, atLeastOnce()).getDescription();
+        verify(mockedSwaggerProperties, atLeastOnce()).getContactName();
+        verify(mockedSwaggerProperties, atLeastOnce()).getContactUrl();
+        verify(mockedSwaggerProperties, atLeastOnce()).getContactEmail();
+        verify(mockedSwaggerProperties, atLeastOnce()).getLicense();
+        verify(mockedSwaggerProperties, atLeastOnce()).getLicenseUrl();
     }
 }
