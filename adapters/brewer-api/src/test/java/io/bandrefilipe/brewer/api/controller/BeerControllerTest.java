@@ -23,22 +23,26 @@ package io.bandrefilipe.brewer.api.controller;
 
 import io.bandrefilipe.brewer.api.converters.ConversionFacade;
 import io.bandrefilipe.brewer.api.model.BeerResponse;
+import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
 import io.bandrefilipe.brewer.application.core.domain.entities.BeerFactory;
 import io.bandrefilipe.brewer.application.core.domain.vo.Id;
 import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.application.ports.in.BeerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -48,97 +52,69 @@ import static org.mockito.Mockito.verify;
  */
 class BeerControllerTest {
 
-    private ConversionFacade $conversionFacade;
-    private BeerService $beerService;
+    private ConversionFacade mockedConversionFacade;
+    private BeerService mockedBeerService;
 
-    private BeerController classUnderTest;
+    private BeerController objectUnderTest;
 
     @BeforeEach
-    void beforeEach() {
-        this.$conversionFacade = mock(ConversionFacade.class);
-        this.$beerService = mock(BeerService.class);
+    void setup() {
+        setupConversionFacade();
+        setupBeerService();
 
-        this.classUnderTest = new BeerController(
-                $conversionFacade,
-                $beerService
+        this.objectUnderTest = spy(new BeerController(
+                mockedConversionFacade,
+                mockedBeerService
+        ));
+    }
+
+    private void setupConversionFacade() {
+        this.mockedConversionFacade = mock(ConversionFacade.class);
+        doReturn(new BeerResponse())
+                .when(mockedConversionFacade).convertToBeerResponse(any(Beer.class));
+    }
+
+    private void setupBeerService() {
+        this.mockedBeerService = mock(BeerService.class);
+        doReturn(Optional.of(BeerFactory.newBeer()))
+                .when(mockedBeerService).findBeer(eq(Id.valueOf(200)));
+        doReturn(Optional.empty())
+                .when(mockedBeerService).findBeer(eq(Id.valueOf(404)));
+        doReturn(Optional.of(BeerFactory.newBeer()))
+                .when(mockedBeerService).findBeer(eq(SKU.valueOf("SKU200")));
+        doReturn(Optional.empty())
+                .when(mockedBeerService).findBeer(eq(SKU.valueOf("SKU204")));
+    }
+
+    @Test
+    void respondsOkIfABeerIsFoundByItsId() {
+        assertSame(
+                HttpStatus.OK,
+                objectUnderTest.getBeerById(200L).getStatusCode()
         );
     }
 
     @Test
-    void testGetBeerByIdForResponseEntityOk() {
-        // Arrange
-        doReturn(Optional.of(BeerFactory.newBeer()))
-                .when($beerService).findBeer(any(Id.class));
-
-        doReturn(new BeerResponse())
-                .when($conversionFacade).convertToBeerResponse(eq(BeerFactory.newBeer()));
-
-        final var expected = ResponseEntity.ok(new BeerResponse());
-
-        // Act
-        final var actual = classUnderTest.getBeerById(123L);
-
-        // Assert
-        assertEquals(expected, actual);
-
-        verify($beerService, times(1)).findBeer(eq(Id.valueOf(123)));
-        verify($conversionFacade, times(1)).convertToBeerResponse(eq(BeerFactory.newBeer()));
+    void respondsNotFoundIfABeerIsNotFoundByItsId() {
+        assertSame(
+                HttpStatus.NOT_FOUND,
+                objectUnderTest.getBeerById(404L).getStatusCode()
+        );
     }
 
     @Test
-    void testGetBeerByIdForResponseEntityNotFound() {
-        // Arrange
-        doReturn(Optional.empty())
-                .when($beerService).findBeer(any(Id.class));
-
-        final var expected = ResponseEntity.notFound().build();
-
-        // Act
-        final var actual = classUnderTest.getBeerById(123L);
-
-        // Arrange
-        assertEquals(expected, actual);
-
-        verify($beerService, times(1)).findBeer(eq(Id.valueOf(123)));
-        verify($conversionFacade, never()).convertToBeerResponse(any());
+    void respondsOkIfABeerIsFoundByQueriedSku() {
+        assertSame(
+                HttpStatus.OK,
+                objectUnderTest.getBeerBySku("SKU200").getStatusCode()
+        );
     }
 
     @Test
-    void testGetBeerBySkuForResponseEntityOk() {
-        // Arrange
-        doReturn(Optional.of(BeerFactory.newBeer()))
-                .when($beerService).findBeer(any(SKU.class));
-
-        doReturn(new BeerResponse())
-                .when($conversionFacade).convertToBeerResponse(eq(BeerFactory.newBeer()));
-
-        final var expected = ResponseEntity.ok(new BeerResponse());
-
-        // Act
-        final var actual = classUnderTest.getBeerBySku("TEST_SKU");
-
-        // Assert
-        assertEquals(expected, actual);
-
-        verify($beerService, times(1)).findBeer(eq(SKU.valueOf("TEST_SKU")));
-        verify($conversionFacade, times(1)).convertToBeerResponse(eq(BeerFactory.newBeer()));
-    }
-
-    @Test
-    void testGetBeerBySkuForResponseEntityNoContent() {
-        // Arrange
-        doReturn(Optional.empty())
-                .when($beerService).findBeer(any(SKU.class));
-
-        final var expected = ResponseEntity.noContent().build();
-
-        // Act
-        final var actual = classUnderTest.getBeerBySku("TEST_SKU");
-
-        // Arrange
-        assertEquals(expected, actual);
-
-        verify($beerService, times(1)).findBeer(eq(SKU.valueOf("TEST_SKU")));
-        verify($conversionFacade, never()).convertToBeerResponse(any());
+    void respondsNoContentIfABeerIsNotFoundByQueriedSku() {
+        assertSame(
+                HttpStatus.NO_CONTENT,
+                objectUnderTest.getBeerBySku("SKU204").getStatusCode()
+        );
     }
 }
