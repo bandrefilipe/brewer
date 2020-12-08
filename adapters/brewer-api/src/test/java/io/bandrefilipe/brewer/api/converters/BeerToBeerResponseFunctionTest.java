@@ -25,9 +25,11 @@ import io.bandrefilipe.brewer.api.model.BeerResponse;
 import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
 import io.bandrefilipe.brewer.application.core.domain.vo.Id;
 import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author bandrefilipe
@@ -37,25 +39,42 @@ class BeerToBeerResponseFunctionTest {
 
     private final BeerToBeerResponseFunction functionUnderTest = BeerToBeerResponseFunction.getInstance();
 
-    @Test
-    void testBeerToBeerResponseFunction() {
-        // Arrange
-        final var input = Beer
+    private Beer input;
+    private BeerResponse expected;
+
+    @BeforeEach
+    void setup() {
+        setupInput();
+        setupExpected();
+    }
+
+    private void setupInput() {
+        input = Beer
                 .builder()
                 .id(Id.valueOf(123))
                 .sku(SKU.valueOf("TEST_SKU"))
                 .build();
+    }
 
-        final var expected = BeerResponse
+    private void setupExpected() {
+        expected = BeerResponse
                 .builder()
                 .id(123L)
                 .sku("TEST_SKU")
                 .build();
+    }
 
-        // Act
+    @Test
+    void convertsTypeWhenArgumentIsNotNull() {
         final var actual = functionUnderTest.apply(input);
-
-        // Assert
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void throwsNullPointerExceptionWhenArgumentIsNull() {
+        assertThrows(
+                NullPointerException.class,
+                () -> functionUnderTest.apply(null)
+        );
     }
 }
