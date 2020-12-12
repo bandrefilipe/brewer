@@ -21,15 +21,20 @@
  */
 package io.bandrefilipe.brewer.persistence.converters;
 
+import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
+import io.bandrefilipe.brewer.application.core.domain.entities.BeerFactory;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -38,17 +43,32 @@ import static org.mockito.Mockito.verify;
  */
 class PersistenceConversionFacadeTest {
 
+    private Function<BeerEntity, Beer> mockedBeerEntityToBeerFunction;
+
+    private PersistenceConversionFacade objectUnderTest;
+
+    @BeforeEach
+    void setup() {
+        setupBeerEntityToBeerFunction();
+        objectUnderTest = spy(new PersistenceConversionFacade(mockedBeerEntityToBeerFunction));
+    }
+
+    private void setupBeerEntityToBeerFunction() {
+        mockedBeerEntityToBeerFunction = mock(Function.class);
+        doReturn(BeerFactory.newBeer())
+                .when(mockedBeerEntityToBeerFunction).apply(any());
+    }
+
     @Test
-    void testConvertToBeer() {
-        // Arrange
-        final var $beerEntityToBeerFunction = mock(Function.class);
-        final var $defaultConversionFacade = spy(new PersistenceConversionFacade($beerEntityToBeerFunction));
+    void beerEntityToBeerFunctionMustBeCalledEvenForANullArgument() {
+        objectUnderTest.convertToBeer((BeerEntity) null);
+        verify(mockedBeerEntityToBeerFunction, atLeastOnce()).apply(any());
+    }
+
+    @Test
+    void beerEntityToBeerFunctionMustReceiveTheSameArgumentInstance() {
         final var input = new BeerEntity();
-
-        // Act
-        $defaultConversionFacade.convertToBeer(input);
-
-        // Assert
-        verify($beerEntityToBeerFunction, times(1)).apply(same(input));
+        objectUnderTest.convertToBeer(input);
+        verify(mockedBeerEntityToBeerFunction, atLeastOnce()).apply(same(input));
     }
 }
