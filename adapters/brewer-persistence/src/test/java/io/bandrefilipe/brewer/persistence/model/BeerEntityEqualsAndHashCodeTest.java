@@ -25,7 +25,7 @@ package io.bandrefilipe.brewer.persistence.model;
  * @author bandrefilipe
  * @since 2020-10-10
  */
-class BeerEntityEqualsAndHashcodeTest extends AbstractEqualsAndHashcodeTest<BeerEntity> {
+class BeerEntityEqualsAndHashCodeTest extends AbstractEqualsAndHashCodeTest<BeerEntity> {
 
     @Override
     BeerEntity newObject() {
