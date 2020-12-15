@@ -22,11 +22,20 @@
 package io.bandrefilipe.brewer.persistence.model;
 
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Flavor;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author bandrefilipe
@@ -34,33 +43,74 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class BeerEntityFlavorTest {
 
+    private final TreeSet<String> validCodes = new TreeSet<>();
+    private final TreeSet<String> invalidCodes = new TreeSet<>();
+    private final HashMap<String, Flavor> expectedFlavorByCodeMap = new HashMap<>();
+
+    @BeforeEach
+    void setup() {
+        setupValidCodes();
+        setupInvalidCodes();
+        setupExpectedFlavorByCodeMap();
+    }
+
+    @AfterEach
+    void tearDown() {
+        validCodes.clear();
+        invalidCodes.clear();
+        expectedFlavorByCodeMap.clear();
+    }
+
+    private void setupValidCodes() {
+        validCodes.addAll(asList(
+                "B", "F", "S", "T", "W"
+        ));
+    }
+
+    private void setupInvalidCodes() {
+        invalidCodes.addAll(asList(
+                "b", "f", "s", "t", "w", "A", "Z"
+        ));
+    }
+
+    private void setupExpectedFlavorByCodeMap() {
+        expectedFlavorByCodeMap.put("B", Flavor.BITTER);
+        expectedFlavorByCodeMap.put("F", Flavor.FRUITY);
+        expectedFlavorByCodeMap.put("S", Flavor.SOFT);
+        expectedFlavorByCodeMap.put("T", Flavor.STRONG);
+        expectedFlavorByCodeMap.put("W", Flavor.SWEET);
+    }
+
     @Test
-    void testGetByCode() {
-        // Arrange
-        final var expectedBitter = Flavor.BITTER;
-        final var expectedFruity = Flavor.FRUITY;
-        final var expectedSoft   = Flavor.SOFT;
-        final var expectedStrong = Flavor.STRONG;
-        final var expectedSweet  = Flavor.SWEET;
+    void getsEnumByCodeIfArgumentIsValid() {
+        for (final var code : validCodes) {
+            final var expected = expectedFlavorByCodeMap.get(code);
+            final var actual = Flavor.getByCode(code);
+            assertNotNull(actual);
+            assertSame(expected, actual);
+        }
+    }
 
-        // Act
-        final var actualBitter = Flavor.getByCode("B");
-        final var actualFruity = Flavor.getByCode("F");
-        final var actualSoft   = Flavor.getByCode("S");
-        final var actualStrong = Flavor.getByCode("T");
-        final var actualSweet  = Flavor.getByCode("W");
+    @Test
+    void gettingEnumByCodeReturnsNullIfArgumentIsNull() {
+        assertNull(Flavor.getByCode((String) null));
+    }
 
-        // Assert
-        assertSame(expectedBitter, actualBitter, "Wrong result");
-        assertSame(expectedFruity, actualFruity, "Wrong result");
-        assertSame(expectedSoft,   actualSoft,   "Wrong result");
-        assertSame(expectedStrong, actualStrong, "Wrong result");
-        assertSame(expectedSweet,  actualSweet,  "Wrong result");
-        assertNull(Flavor.getByCode(null), "A null argument should produce a null return value");
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> Flavor.getByCode("invalidInput"),
-                "Any argument value other than null, \"B\", \"F\", \"S\", \"T\" or \"W\" should throw an exception"
+    @Test
+    void throwsExceptionWhenGettingEnumByCodeIfCodeIsInvalid() {
+        for (final var code : invalidCodes) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> Flavor.getByCode(code)
+            );
+        }
+    }
+
+    @Test
+    void allEnumsAreTested() {
+        final var testedFlavors = expectedFlavorByCodeMap.values();
+        assertTrue(Stream.of(Flavor.values())
+                .allMatch(testedFlavors::contains)
         );
     }
 }
