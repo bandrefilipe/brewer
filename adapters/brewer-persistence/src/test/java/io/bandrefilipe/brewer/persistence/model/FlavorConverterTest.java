@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -125,9 +124,12 @@ class FlavorConverterTest {
     }
 
     @Test
-    void convertingDatabaseColumnToFlavorReturnsNullIfArgumentIsInvalid() {
+    void throwsExceptionWhenConvertingDatabaseColumnToFlavorIfArgumentIsInvalid() {
         for (final var invalidDatabaseColumn : invalidDatabaseColumns) {
-            assertNull(objectUnderTest.convertToEntityAttribute(invalidDatabaseColumn));
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> objectUnderTest.convertToEntityAttribute(invalidDatabaseColumn)
+            );
         }
     }
 }
