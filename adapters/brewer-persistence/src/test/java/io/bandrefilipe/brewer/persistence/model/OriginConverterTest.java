@@ -21,13 +21,19 @@
  */
 package io.bandrefilipe.brewer.persistence.model;
 
-import io.bandrefilipe.brewer.persistence.model.BeerEntity.Origin;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.TreeSet;
+
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.spy;
 
 /**
  * @author bandrefilipe
@@ -35,47 +41,92 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class OriginConverterTest {
 
-    private OriginConverter converter;
+    private final BeerEntity.Origin[] origins = BeerEntity.Origin.values();
+    private final TreeSet<String> validDatabaseColumns = new TreeSet<>();
+    private final TreeSet<String> invalidDatabaseColumns = new TreeSet<>();
+    private final EnumMap<BeerEntity.Origin, String> expectedDatabaseColumnByOrigin = new EnumMap<>(BeerEntity.Origin.class);
+    private final HashMap<String, BeerEntity.Origin> expectedOriginByDatabaseColumn = new HashMap<>();
+
+    private OriginConverter objectUnderTest;
 
     @BeforeEach
-    void beforeEach() {
-        converter = new OriginConverter();
+    void setup() {
+        setupValidDatabaseColumns();
+        setupInvalidDatabaseColumns();
+        setupExpectedResults();
+        objectUnderTest = spy(new OriginConverter());
+    }
+
+    @AfterEach
+    void tearDown() {
+        validDatabaseColumns.clear();
+        invalidDatabaseColumns.clear();
+        expectedDatabaseColumnByOrigin.clear();
+        expectedOriginByDatabaseColumn.clear();
+    }
+
+    private void setupValidDatabaseColumns() {
+        validDatabaseColumns.addAll(asList(
+                "D", "I"
+        ));
+    }
+
+    private void setupInvalidDatabaseColumns() {
+        invalidDatabaseColumns.addAll(asList(
+                "d", "i", "A", "Z"
+        ));
+    }
+
+    private void setupExpectedResults() {
+        setupExpectedDatabaseColumnByOrigin();
+        setupExpectedOriginByDatabaseColumn();
+    }
+
+    private void setupExpectedDatabaseColumnByOrigin() {
+        expectedDatabaseColumnByOrigin.put(BeerEntity.Origin.DOMESTIC, "D");
+        expectedDatabaseColumnByOrigin.put(BeerEntity.Origin.IMPORTED, "I");
+    }
+
+    private void setupExpectedOriginByDatabaseColumn() {
+        expectedDatabaseColumnByOrigin
+                .forEach((key, value) -> expectedOriginByDatabaseColumn.put(value, key));
     }
 
     @Test
-    void testConvertToDatabaseColumn() {
-        // Arrange
-        final var expectedDomestic = "D";
-        final var expectedImported = "I";
-
-        // Act
-        final var actualDomestic = converter.convertToDatabaseColumn(Origin.DOMESTIC);
-        final var actualImported = converter.convertToDatabaseColumn(Origin.IMPORTED);
-
-        // Assert
-        assertEquals(expectedDomestic, actualDomestic, "Wrong result");
-        assertEquals(expectedImported, actualImported, "Wrong result");
-        assertNull(converter.convertToDatabaseColumn(null), "A null argument should produce a null return value");
+    void convertsOriginToDatabaseColumn() {
+        for (final var origin : origins) {
+            final var expected = expectedDatabaseColumnByOrigin.get(origin);
+            final var actual = objectUnderTest.convertToDatabaseColumn(origin);
+            assertSame(expected, actual);
+        }
     }
 
     @Test
-    void testConvertToEntityAttribute() {
-        // Arrange
-        final var expectedDomestic = Origin.DOMESTIC;
-        final var expectedImported = Origin.IMPORTED;
+    void convertingOriginToDatabaseColumnReturnsNullIfArgumentIsNull() {
+        assertNull(objectUnderTest.convertToDatabaseColumn((BeerEntity.Origin) null));
+    }
 
-        // Act
-        final var actualDomestic = converter.convertToEntityAttribute("D");
-        final var actualImported = converter.convertToEntityAttribute("I");
+    @Test
+    void convertsDatabaseColumnToOriginIfArgumentIsValid() {
+        for (final var validDatabaseColumn : validDatabaseColumns) {
+            final var expected = expectedOriginByDatabaseColumn.get(validDatabaseColumn);
+            final var actual = objectUnderTest.convertToEntityAttribute(validDatabaseColumn);
+            assertSame(expected, actual);
+        }
+    }
 
-        // Assert
-        assertEquals(expectedDomestic, actualDomestic, "Wrong result");
-        assertEquals(expectedImported, actualImported, "Wrong result");
-        assertNull(converter.convertToEntityAttribute(null), "A null argument should produce a null return value");
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> converter.convertToEntityAttribute("invalidInput"),
-                "Any argument value other than null, \"D\" or \"I\" should throw an exception"
-        );
+    @Test
+    void convertingDatabaseColumnToOriginReturnsNullIfArgumentIsNull() {
+        assertNull(objectUnderTest.convertToEntityAttribute((String) null));
+    }
+
+    @Test
+    void throwsExceptionWhenConvertingDatabaseColumnToOriginIfArgumentIsInvalid() {
+        for (final var invalidDatabaseColumn : invalidDatabaseColumns) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> objectUnderTest.convertToEntityAttribute(invalidDatabaseColumn)
+            );
+        }
     }
 }
