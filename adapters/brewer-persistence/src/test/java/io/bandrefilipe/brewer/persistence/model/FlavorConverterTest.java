@@ -78,11 +78,11 @@ class FlavorConverterTest {
     }
 
     private void setupExpectedResults() {
-        setupExpectedDatabaseValueByFlavorMap();
-        setupExpectedFlavorByDatabaseValueMap();
+        setupExpectedDatabaseColumnByFlavor();
+        setupExpectedFlavorByDatabaseColumn();
     }
 
-    private void setupExpectedDatabaseValueByFlavorMap() {
+    private void setupExpectedDatabaseColumnByFlavor() {
         expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.BITTER, "B");
         expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.FRUITY, "F");
         expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.SOFT, "S");
@@ -90,7 +90,7 @@ class FlavorConverterTest {
         expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.SWEET, "W");
     }
 
-    private void setupExpectedFlavorByDatabaseValueMap() {
+    private void setupExpectedFlavorByDatabaseColumn() {
         expectedDatabaseColumnByFlavor
                 .forEach((key, value) -> expectedFlavorByDatabaseColumn.put(value, key));
     }
