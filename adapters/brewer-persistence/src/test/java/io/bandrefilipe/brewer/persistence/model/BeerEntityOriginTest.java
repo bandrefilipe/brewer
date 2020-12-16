@@ -28,9 +28,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.TreeSet;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -105,9 +105,11 @@ class BeerEntityOriginTest {
 
     @Test
     void allEnumsAreTested() {
-        final var testedFlavors = expectedOriginByCodeMap.values();
-        assertTrue(Stream.of(Origin.values())
-                .allMatch(testedFlavors::contains)
-        );
+        final var testedOrigins = validCodes
+                .stream()
+                .map(Origin::getByCode)
+                .collect(toList());
+        final var origins = asList(Origin.values());
+        assertTrue(testedOrigins.containsAll(origins));
     }
 }
