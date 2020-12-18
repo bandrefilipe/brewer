@@ -1,11 +1,8 @@
+### THESE SHALL NEVER BE IGNORED ###
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
 !**/src/main/**
 !**/src/test/**
-
-HELP.md
-.gradle
-build/
 
 ### STS ###
 .apt_generated
@@ -32,3 +29,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### CUSTOM ###
+HELP.md
+.gradle
+build/
+**/out/production
