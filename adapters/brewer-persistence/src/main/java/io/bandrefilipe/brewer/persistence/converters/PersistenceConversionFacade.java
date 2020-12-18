@@ -41,7 +41,7 @@ class PersistenceConversionFacade implements ConversionFacade {
 
     @Autowired
     PersistenceConversionFacade(final Function<BeerEntity, Beer> beerEntityToBeerFunction) {
-        log.debug("Creating component for class {}", PersistenceConversionFacade.class);
+        log.debug("Creating component for {}", this.getClass());
         this.beerEntityToBeerFunction = beerEntityToBeerFunction;
     }
 

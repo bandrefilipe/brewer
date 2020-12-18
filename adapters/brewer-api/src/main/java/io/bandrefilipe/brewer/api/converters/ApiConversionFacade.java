@@ -41,7 +41,7 @@ class ApiConversionFacade implements ConversionFacade {
 
     @Autowired
     ApiConversionFacade(final Function<Beer, BeerResponse> beerToBeerResponseFunction) {
-        log.debug("Creating component for class {}", ApiConversionFacade.class);
+        log.debug("Creating component for {}", this.getClass());
         this.beerToBeerResponseFunction = beerToBeerResponseFunction;
     }
 

@@ -39,7 +39,7 @@ import java.util.function.Function;
 class BeerEntityToBeerFunction implements Function<BeerEntity, Beer> {
 
     private BeerEntityToBeerFunction() {
-        log.debug("Creating component for class {}", BeerEntityToBeerFunction.class);
+        log.debug("Creating component for {}", this.getClass());
     }
 
     private static class BillPughSingleton {

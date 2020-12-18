@@ -46,7 +46,7 @@ class BeerRepositoryAdapter implements BeerRepository {
     @Autowired
     BeerRepositoryAdapter(final ConversionFacade conversionFacade,
                           final BeerEntityRepository beerEntityRepository) {
-        log.debug("Creating component for class {}", BeerRepositoryAdapter.class);
+        log.debug("Creating component for {}", this.getClass());
         this.conversionFacade = conversionFacade;
         this.beerEntityRepository = beerEntityRepository;
     }

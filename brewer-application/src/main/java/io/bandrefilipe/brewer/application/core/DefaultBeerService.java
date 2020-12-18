@@ -45,7 +45,7 @@ class DefaultBeerService implements BeerService {
 
     @Autowired
     DefaultBeerService(final BeerRepository beerRepository) {
-        log.debug("Creating component for class {}", DefaultBeerService.class);
+        log.debug("Creating component for {}", this.getClass());
         this.beerRepository = beerRepository;
     }
 
