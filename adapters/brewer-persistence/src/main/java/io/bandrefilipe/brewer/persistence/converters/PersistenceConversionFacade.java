@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author bandrefilipe
  * @since 2020-10-25
@@ -42,7 +44,7 @@ class PersistenceConversionFacade implements ConversionFacade {
     @Autowired
     PersistenceConversionFacade(final Function<BeerEntity, Beer> beerEntityToBeerFunction) {
         log.debug("Creating component for {}", this.getClass());
-        this.beerEntityToBeerFunction = beerEntityToBeerFunction;
+        this.beerEntityToBeerFunction = requireNonNull(beerEntityToBeerFunction);
     }
 
     @Override
