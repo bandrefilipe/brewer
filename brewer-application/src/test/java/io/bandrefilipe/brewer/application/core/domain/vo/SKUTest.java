@@ -22,13 +22,14 @@
 package io.bandrefilipe.brewer.application.core.domain.vo;
 
 import io.bandrefilipe.brewer.application.core.domain.exceptions.ParseException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.TreeSet;
 
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -37,54 +38,86 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class SKUTest {
 
+    private static final HashMap<String, SKU> expectedSkuByValidInput = new HashMap<>();
+    private static final TreeSet<String> invalidInputs = new TreeSet<>();
+
+    @BeforeEach
+    void setup() {
+        setupExpectedSkuByValidInput();
+        setupInvalidValueOfInputs();
+    }
+
+    @AfterEach
+    void tearDown() {
+        expectedSkuByValidInput.clear();
+        invalidInputs.clear();
+    }
+
+    private void setupExpectedSkuByValidInput() {
+        expectedSkuByValidInput.put(null, SKU.empty());
+        expectedSkuByValidInput.put("test1", SKU.valueOf("TEST1"));
+        expectedSkuByValidInput.put("  test2  ", SKU.valueOf("TEST2"));
+        expectedSkuByValidInput.put("~!@#$%^&*()+{}|:<>?  test3  `-=[]\\;',./", SKU.valueOf("TEST3"));
+        expectedSkuByValidInput.put("  test!4@  ", SKU.valueOf("TEST4"));
+        expectedSkuByValidInput.put("  test 5  ", SKU.valueOf("TEST5"));
+        expectedSkuByValidInput.put("  test _ 6", SKU.valueOf("TEST_6"));
+    }
+
+    private void setupInvalidValueOfInputs() {
+        invalidInputs.add("");
+        invalidInputs.add(" ");
+        invalidInputs.add("\u0000");
+        invalidInputs.add("\u00FF");
+        invalidInputs.add(" ~!@#$%^&*()+`-={}|[]\\:;'<>?,./ ");
+        invalidInputs.add("ÁáÂâÀàÅåÃãÄäÆæ");
+        invalidInputs.add("ÉéÊêÈèËëÐð");
+        invalidInputs.add("ÍíÎîÌìÏï");
+        invalidInputs.add("ÓóÔôÒòØøÕõÖö");
+        invalidInputs.add("ÚúÛûÙùÜü");
+        invalidInputs.add("Çç");
+        invalidInputs.add("Ññ");
+        invalidInputs.add("Ýý");
+        invalidInputs.add("®©Þþß");
+    }
+
     @Test
-    void testValueOf() {
-        assertNull(SKU.valueOf(null).getValue());
+    void testValueOfForValidInputs() {
+        for (final var validInput : expectedSkuByValidInput.keySet()) {
+            assertEquals(
+                    expectedSkuByValidInput.get(validInput),
+                    SKU.valueOf(validInput)
+            );
+        }
+    }
 
-        assertEquals("TEST123", SKU.valueOf("test123").getValue());
-        assertEquals("TEST234", SKU.valueOf("  test234  ").getValue());
-        assertEquals("TEST345", SKU.valueOf("~!@#$%^&*()+{}|:<>?  test345  `-=[]\\;',./").getValue());
-        assertEquals("TEST456", SKU.valueOf("  test!4@5#6  ").getValue());
-        assertEquals("TEST567", SKU.valueOf("  test 5 6 7  ").getValue());
-        assertEquals("TEST_67", SKU.valueOf("  test _ 6 7").getValue());
+    @Test
+    void skuValuesHaveNoNonWordCharacters() {
+        assertEquals("TEST", SKU.valueOf("TEST~!@#$%^&*()+`-={}|[]\\:;'<>?,./").getValue());
+    }
 
-        final var expectedException = ParseException.class;
-        assertThrows(expectedException, () -> SKU.valueOf(""));
-        assertThrows(expectedException, () -> SKU.valueOf(" "));
-        assertThrows(expectedException, () -> SKU.valueOf("\u0000"));
-        assertThrows(expectedException, () -> SKU.valueOf("\u00FF"));
-        assertThrows(expectedException, () -> SKU.valueOf(" ~!@#$%^&*()+`-={}|[]\\:;'<>?,./ "));
-        assertThrows(expectedException, () -> SKU.valueOf("ÁáÂâÀàÅåÃãÄäÆæ"));
-        assertThrows(expectedException, () -> SKU.valueOf("ÉéÊêÈèËëÐð"));
-        assertThrows(expectedException, () -> SKU.valueOf("ÍíÎîÌìÏï"));
-        assertThrows(expectedException, () -> SKU.valueOf("ÓóÔôÒòØøÕõÖö"));
-        assertThrows(expectedException, () -> SKU.valueOf("ÚúÛûÙùÜü"));
-        assertThrows(expectedException, () -> SKU.valueOf("Çç"));
-        assertThrows(expectedException, () -> SKU.valueOf("Ññ"));
-        assertThrows(expectedException, () -> SKU.valueOf("Ýý"));
-        assertThrows(expectedException, () -> SKU.valueOf("®©Þþß"));
+    @Test
+    void skuValuesAreTrimmed() {
+        assertEquals("TEST", SKU.valueOf("  TEST  ").getValue());
+    }
+
+    @Test
+    void skuValuesAreUpperCase() {
+        assertEquals("TEST", SKU.valueOf("test").getValue());
+    }
+
+    @Test
+    void throwsExceptionIfValueOfInputIsInvalid() {
+        for (final var invalidInput : invalidInputs) {
+            assertThrows(
+                    ParseException.class,
+                    () -> SKU.valueOf(invalidInput)
+            );
+        }
     }
 
     @Test
     void testToString() {
         assertEquals("null", SKU.valueOf(null).toString());
         assertEquals("ABC123", SKU.valueOf("abc123").toString());
-    }
-
-    @Test
-    void testIdentity() {
-        // Arrange
-        final var valuesBySKU = new HashMap<SKU, String>();
-        asList(
-                SKU.valueOf(null),
-                SKU.valueOf("abc"),
-                SKU.valueOf("   xyz   ")
-        ).forEach(sku -> valuesBySKU.put(sku, sku.getValue()));
-
-        // Act & Assert
-        assertNull(valuesBySKU.get(SKU.valueOf(null)));
-
-        assertEquals("ABC", valuesBySKU.get(SKU.valueOf("  abc  ")));
-        assertEquals("XYZ", valuesBySKU.get(SKU.valueOf("xyz")));
     }
 }
