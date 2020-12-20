@@ -19,9 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.application.core.domain;
-
-import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
+package io.bandrefilipe.brewer.application.core.domain.entities;
 
 /**
  * @author bandrefilipe

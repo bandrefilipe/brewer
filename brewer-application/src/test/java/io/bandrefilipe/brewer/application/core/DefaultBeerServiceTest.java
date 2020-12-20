@@ -21,7 +21,7 @@
  */
 package io.bandrefilipe.brewer.application.core;
 
-import io.bandrefilipe.brewer.application.core.domain.BeerFactory;
+import io.bandrefilipe.brewer.application.core.domain.entities.BeerFactory;
 import io.bandrefilipe.brewer.application.core.domain.vo.Id;
 import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.application.ports.out.BeerRepository;
