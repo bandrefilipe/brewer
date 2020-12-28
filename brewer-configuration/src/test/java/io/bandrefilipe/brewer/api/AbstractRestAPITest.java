@@ -22,6 +22,8 @@
 package io.bandrefilipe.brewer.api;
 
 import io.bandrefilipe.brewer.commons.lang.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -39,8 +41,10 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 abstract class AbstractRestAPITest {
 
+    private static final Logger log = LoggerFactory.getLogger(AbstractRestAPITest.class);
+
     @LocalServerPort
-    private int port;
+    private int localServerPort;
 
     @Autowired
     protected TestRestTemplate restTemplate;
@@ -51,18 +55,30 @@ abstract class AbstractRestAPITest {
 
     protected URI buildUri(@NonNull final ApiVersion version,
                            @NonNull final String URN) {
-        final var builder = new StringBuilder()
-                .append("http://localhost:")
-                .append(this.port)
-                .append(version.getValue());
+        log.debug("Creating URI for ApiVersion={} URN={}", version, URN);
 
+        final var builder = buildUriPrefix(version);
+        final var uriString = buildUriSuffix(builder, URN).toString();
+        final var uri = URI.create(uriString);
+
+        log.debug("URI \"{}\" created", uri);
+        return uri;
+    }
+
+    private StringBuilder buildUriPrefix(@NonNull final ApiVersion version) {
+        return new StringBuilder()
+                .append("http://localhost:")
+                .append(localServerPort)
+                .append(version.getValue());
+    }
+
+    private StringBuilder buildUriSuffix(@NonNull final StringBuilder builder,
+                                         @NonNull final String URN) {
         final var suffix = Strings.trimToEmpty(URN);
         if (not(suffix.startsWith("/"))) {
             builder.append("/");
         }
-        builder.append(suffix);
-
-        return URI.create(builder.toString());
+        return builder.append(suffix);
     }
 
     protected enum ApiVersion {
@@ -70,7 +86,7 @@ abstract class AbstractRestAPITest {
 
         private final String value;
 
-        private ApiVersion(final String value) {
+        ApiVersion(final String value) {
             this.value = value;
         }
 
