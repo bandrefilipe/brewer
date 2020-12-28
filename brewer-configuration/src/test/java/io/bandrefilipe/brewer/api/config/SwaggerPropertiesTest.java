@@ -38,14 +38,42 @@ class SwaggerPropertiesTest {
     private SwaggerProperties properties;
 
     @Test
-    void testPropertiesForNonNullity() {
+    void propertiesTitleMustNotBeNull() {
         assertNotNull(properties.getTitle(), "Title is missing");
+    }
+
+    @Test
+    void propertiesVersionMustNotBeNull() {
         assertNotNull(properties.getVersion(), "Version is missing");
+    }
+
+    @Test
+    void propertiesDescriptionMustNotBeNull() {
         assertNotNull(properties.getDescription(), "Description is missing");
+    }
+
+    @Test
+    void propertiesContactNameMustNotBeNull() {
         assertNotNull(properties.getContactName(), "Contact Name is missing");
+    }
+
+    @Test
+    void propertiesContactUrlMustNotBeNull() {
         assertNotNull(properties.getContactUrl(), "Contact URL is missing");
+    }
+
+    @Test
+    void propertiesContactEmailMustNotBeNull() {
         assertNotNull(properties.getContactEmail(), "Contact E-mail is missing");
+    }
+
+    @Test
+    void propertiesLicenseMustNotBeNull() {
         assertNotNull(properties.getLicense(), "License is missing");
+    }
+
+    @Test
+    void propertiesLicenseUrlMustNotBeNull() {
         assertNotNull(properties.getLicenseUrl(), "License URL is missing");
     }
 }
