@@ -27,6 +27,7 @@ import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Flavor;
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Origin;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -42,33 +43,49 @@ class BeerEntityToBeerFunctionTest {
 
     private final BeerEntityToBeerFunction functionUnderTest = BeerEntityToBeerFunction.getInstance();
 
-    @Test
-    void testBeerEntityToBeerFunction() {
-        // Arrange
-        final var entity = new BeerEntity();
-        entity.setId(1L);
-        entity.setSku("AAA0001");
-        entity.setName("Beer Name");
-        entity.setDescription("The beer description");
-        entity.setUnitPrice(BigDecimal.valueOf(12.95));
-        entity.setAlcoholContent(BigDecimal.valueOf(8.0));
-        entity.setCommission(BigDecimal.valueOf(20.0));
-        entity.setStock(2_000);
-        entity.setOrigin(Origin.DOMESTIC);
-        entity.setFlavor(Flavor.SOFT);
-        entity.setType(null);
+    private BeerEntity input;
+    private Beer expected;
 
-        final var expected = Beer.builder()
-                .id(Id.valueOf(1L))
-                .sku(SKU.valueOf("AAA0001"))
+    @BeforeEach
+    void setup() {
+        setupInput();
+        setupExpected();
+    }
+
+    private void setupInput() {
+        input = new BeerEntity();
+        input.setId(1L);
+        input.setSku("TEST_SKU");
+        input.setName("Beer Name");
+        input.setDescription("The Description");
+        input.setUnitPrice(BigDecimal.valueOf(12.95));
+        input.setAlcoholContent(BigDecimal.valueOf(8.0));
+        input.setCommission(BigDecimal.valueOf(20.0));
+        input.setStock(2_000);
+        input.setOrigin(Origin.DOMESTIC);
+        input.setFlavor(Flavor.SOFT);
+        input.setType(null);
+    }
+
+    private void setupExpected() {
+        expected = Beer
+                .builder()
+                .id(Id.valueOf(1))
+                .sku(SKU.valueOf("TEST_SKU"))
                 .build();
+    }
 
-        // Act
-        final var actual = functionUnderTest.apply(entity);
-
-        // Assert
+    @Test
+    void convertsTypeIfArgumentIsNotNull() {
+        final var actual = functionUnderTest.apply(input);
         assertEquals(expected, actual);
+    }
 
-        assertThrows(NullPointerException.class, () -> functionUnderTest.apply(null));
+    @Test
+    void throwsNullPointerExceptionIfArgumentIsNull() {
+        assertThrows(
+                NullPointerException.class,
+                () -> functionUnderTest.apply((BeerEntity) null)
+        );
     }
 }

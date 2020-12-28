@@ -21,7 +21,7 @@
  */
 package io.bandrefilipe.brewer.application.core;
 
-import io.bandrefilipe.brewer.application.core.domain.entities.Beer;
+import io.bandrefilipe.brewer.application.core.domain.entities.BeerFactory;
 import io.bandrefilipe.brewer.application.core.domain.vo.Id;
 import io.bandrefilipe.brewer.application.core.domain.vo.SKU;
 import io.bandrefilipe.brewer.application.ports.out.BeerRepository;
@@ -30,13 +30,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -45,75 +44,32 @@ import static org.mockito.Mockito.verify;
  */
 class DefaultBeerServiceTest {
 
-    private BeerRepository $beerRepository;
-    private DefaultBeerService $defaultBeerService;
+    private BeerRepository mockedBeerRepository;
+    private DefaultBeerService objectUnderTest;
 
     @BeforeEach
-    void beforeEach() {
-        $beerRepository = mock(BeerRepository.class);
-        $defaultBeerService = spy(new DefaultBeerService($beerRepository));
+    void setup() {
+        setupBeerRepository();
+        objectUnderTest = spy(new DefaultBeerService(mockedBeerRepository));
+    }
+
+    private void setupBeerRepository() {
+        mockedBeerRepository = mock(BeerRepository.class);
+        doReturn(Optional.of(BeerFactory.newBeer()))
+                .when(mockedBeerRepository).retrieveBeer(any(Id.class));
+        doReturn(Optional.of(BeerFactory.newBeer()))
+                .when(mockedBeerRepository).retrieveBeer(any(SKU.class));
     }
 
     @Test
-    void testFindBeerById() {
-        // Arrange
-        doReturn(Optional.of(Beer
-                .builder()
-                .id(Id.valueOf(789))
-                .build())
-        ).when($beerRepository).retrieveBeer(eq(Id.valueOf(123)));
-
-        final var input = Id.valueOf(123);
-
-        final var expected = Optional.of(Beer
-                .builder()
-                .id(Id.valueOf(789))
-                .build());
-
-        // Act
-        final var actual = $defaultBeerService.findBeer(input);
-
-        // Assert
-        assertEquals(expected, actual);
-
-        verify($beerRepository, times(1)).retrieveBeer(same(input));
+    void findingBeerByIdCallsRepository() {
+        objectUnderTest.findBeer(Id.valueOf(1));
+        verify(mockedBeerRepository, atLeastOnce()).retrieveBeer(eq(Id.valueOf(1)));
     }
 
     @Test
-    void testFindBeerBySKU() {
-        // Arrange
-        doReturn(Optional.of(Beer
-                .builder()
-                .sku(SKU.valueOf("RESULT"))
-                .build())
-        ).when($beerRepository).retrieveBeer(eq(SKU.valueOf("INPUT")));
-
-        final var input = SKU.valueOf("INPUT");
-
-        final var expected = Optional.of(Beer
-                .builder()
-                .sku(SKU.valueOf("RESULT"))
-                .build());
-
-        // Act
-        final var actual = $defaultBeerService.findBeer(input);
-
-        // Assert
-        assertEquals(expected, actual);
-
-        verify($beerRepository, times(1)).retrieveBeer(same(input));
-    }
-
-    @Test
-    void testFindBeerTemplate() {
-        // Arrange
-        final var input = new Object();
-        final var expected = "function result";
-
-        // Act
-        final var actual = $defaultBeerService.findBeerTemplate(input, obj -> "function result");
-
-        // Assert
-        assertEquals(expected, actual);
+    void findingBeerBySkuCallsRepository() {
+        objectUnderTest.findBeer(SKU.valueOf("TEST"));
+        verify(mockedBeerRepository, atLeastOnce()).retrieveBeer(eq(SKU.valueOf("TEST")));
     }
 }

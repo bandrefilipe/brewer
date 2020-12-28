@@ -21,13 +21,11 @@
  */
 package io.bandrefilipe.brewer.api.controller;
 
+import io.bandrefilipe.brewer.application.core.domain.entities.BeerFactory;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
-import java.util.Collection;
-
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * @author bandrefilipe
@@ -36,49 +34,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ResponsesTest {
 
     @Test
-    void testOkResponse() {
-        // Arrange
-        final String stringInput = "Response Body";
-        final var expectedStringResponse = ResponseEntity.ok("Response Body");
-
-        final Collection<Integer> integerCollectionInput = asList(1, 2, 3, 4, 5);
-        final var expectedIntegerCollectionResponse = ResponseEntity.ok(asList(1, 2, 3, 4, 5));
-
-        final Object nullInput = null;
-        final var expectedNullResponse = ResponseEntity.ok((Object) null);
-
-        // Act
-        final var actualStringResponse = Responses.ok(stringInput);
-        final var actualIntegerCollectionResponse = Responses.ok(integerCollectionInput);
-        final var actualNullResponse = Responses.ok(nullInput);
-
-        // Assert
-        assertEquals(expectedStringResponse, actualStringResponse);
-        assertEquals(expectedIntegerCollectionResponse, actualIntegerCollectionResponse);
-        assertEquals(expectedNullResponse, actualNullResponse);
+    void validateOkResponseStatus() {
+        assertSame(
+                HttpStatus.OK,
+                Responses.ok(null).getStatusCode()
+        );
     }
 
     @Test
-    void testNoContentResponse() {
-        // Arrange
-        final var expected = ResponseEntity.noContent().build();
-
-        // Act
-        final var actual = Responses.noContent();
-
-        // Assert
-        assertEquals(expected, actual);
+    void okResponseBodyMustBeTheSameInstanceOfItsGivenArgument() {
+        final Object input = BeerFactory.newBeer();
+        assertSame(
+                input,
+                Responses.ok(input).getBody()
+        );
     }
 
     @Test
-    void testNotFoundResponse() {
-        // Arrange
-        final var expected = ResponseEntity.notFound().build();
+    void validateNoContentResponseStatus() {
+        assertSame(
+                HttpStatus.NO_CONTENT,
+                Responses.noContent().getStatusCode()
+        );
+    }
 
-        // Act
-        final var actual = Responses.notFound();
-
-        // Assert
-        assertEquals(expected, actual);
+    @Test
+    void validateNotFoundResponseStatus() {
+        assertSame(
+                HttpStatus.NOT_FOUND,
+                Responses.notFound().getStatusCode()
+        );
     }
 }

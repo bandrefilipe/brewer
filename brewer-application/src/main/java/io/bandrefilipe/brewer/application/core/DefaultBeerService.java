@@ -33,6 +33,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author bandrefilipe
  * @since 2020-10-22
@@ -45,8 +47,8 @@ class DefaultBeerService implements BeerService {
 
     @Autowired
     DefaultBeerService(final BeerRepository beerRepository) {
-        log.debug("Creating component for class {}", DefaultBeerService.class);
-        this.beerRepository = beerRepository;
+        log.debug("Creating component for {}", this.getClass());
+        this.beerRepository = requireNonNull(beerRepository);
     }
 
     @Override

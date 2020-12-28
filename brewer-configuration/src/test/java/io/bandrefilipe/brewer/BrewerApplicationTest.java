@@ -39,7 +39,7 @@ class BrewerApplicationTest {
     private ApplicationContext applicationContext;
 
     @Test
-    void testContextLoads() {
+    void applicationContextLoadsSuccessfully() {
         assertNotNull(applicationContext, "Application Context is missing");
     }
 }

@@ -22,11 +22,12 @@
 package io.bandrefilipe.brewer.application.core.domain.vo;
 
 import io.bandrefilipe.brewer.application.core.domain.exceptions.ParseException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,14 +38,46 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class IdTest {
 
+    private final ArrayList<Long> validInputs = new ArrayList<>();
+
+    @BeforeEach
+    void setup() {
+        setupValidInputs();
+    }
+
+    @AfterEach
+    void tearDown() {
+        validInputs.clear();
+    }
+
+    private void setupValidInputs() {
+        validInputs.add(0L);
+        validInputs.add(1L);
+        validInputs.add((long) Integer.MAX_VALUE);
+        validInputs.add(Long.MAX_VALUE);
+    }
+
     @Test
-    void testValueOf() {
+    void emptyIdMustHaveNullValue() {
         assertNull(Id.empty().getValue());
+    }
 
-        assertEquals(Long.valueOf(0), Id.valueOf(0).getValue());
-        assertEquals(Long.valueOf(Long.MAX_VALUE), Id.valueOf(Long.MAX_VALUE).getValue());
+    @Test
+    void idValueMustBeEqualToPassedArgumentIfArgumentIsValid() {
+        for (final var validInput : validInputs) {
+            assertEquals(
+                    validInput,
+                    Id.valueOf(validInput).getValue()
+            );
+        }
+    }
 
-        assertThrows(ParseException.class, () -> Id.valueOf(-1));
+    @Test
+    void throwsExceptionIfArgumentIsNegative() {
+        assertThrows(
+                ParseException.class,
+                () -> Id.valueOf(-1)
+        );
     }
 
     @Test
@@ -55,33 +88,20 @@ class IdTest {
     }
 
     @Test
-    void testIdentity() {
-        // Arrange
-        final var valuesById = new HashMap<Id, Long>();
-        asList(
-                Id.empty(),
-                Id.valueOf(0),
-                Id.valueOf(Long.MAX_VALUE)
-        ).forEach(id -> valuesById.put(id, id.getValue()));
-
-        // Act & Assert
-        assertNull(valuesById.get(Id.empty()));
-
-        assertEquals(0, valuesById.get(Id.valueOf(0)));
-        assertEquals(Long.MAX_VALUE, valuesById.get(Id.valueOf(Long.MAX_VALUE)));
+    void idsOfSameValueMustHaveEqualHashCodesEvenWhenConstructedFromDifferentTypes() {
+        assertEquals(
+                Id.valueOf(Integer.valueOf(0)).hashCode(),
+                Id.valueOf(Long.valueOf(0)).hashCode()
+        );
     }
 
     @Test
-    void testValueOfNull() {
-        // Arrange
-        final var expected = Id.empty();
+    void idForValueOfIntegerNullMustBeEmptyId() {
+        assertEquals(Id.empty(), Id.valueOf((Integer) null));
+    }
 
-        // Act
-        final var actualForNullInteger = Id.valueOf((Integer) null);
-        final var actualForNullLong = Id.valueOf((Long) null);
-
-        // Assert
-        assertEquals(expected, actualForNullInteger);
-        assertEquals(expected, actualForNullLong);
+    @Test
+    void idForValueOfLongNullMustBeEmptyId() {
+        assertEquals(Id.empty(), Id.valueOf((Long) null));
     }
 }

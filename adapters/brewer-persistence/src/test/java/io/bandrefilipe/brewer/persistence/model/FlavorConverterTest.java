@@ -21,12 +21,19 @@
  */
 package io.bandrefilipe.brewer.persistence.model;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.TreeSet;
+
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.spy;
 
 /**
  * @author bandrefilipe
@@ -34,65 +41,95 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class FlavorConverterTest {
 
-    private FlavorConverter converter;
+    private final BeerEntity.Flavor[] flavors = BeerEntity.Flavor.values();
+    private final TreeSet<String> validDatabaseColumns = new TreeSet<>();
+    private final TreeSet<String> invalidDatabaseColumns = new TreeSet<>();
+    private final EnumMap<BeerEntity.Flavor, String> expectedDatabaseColumnByFlavor = new EnumMap<>(BeerEntity.Flavor.class);
+    private final HashMap<String, BeerEntity.Flavor> expectedFlavorByDatabaseColumn = new HashMap<>();
+
+    private FlavorConverter objectUnderTest;
 
     @BeforeEach
-    void beforeEach() {
-        converter = new FlavorConverter();
+    void setup() {
+        setupValidDatabaseColumns();
+        setupInvalidDatabaseColumns();
+        setupExpectedResults();
+        objectUnderTest = spy(new FlavorConverter());
+    }
+
+    @AfterEach
+    void tearDown() {
+        validDatabaseColumns.clear();
+        invalidDatabaseColumns.clear();
+        expectedDatabaseColumnByFlavor.clear();
+        expectedFlavorByDatabaseColumn.clear();
+    }
+
+    private void setupValidDatabaseColumns() {
+        validDatabaseColumns.addAll(asList(
+                "B", "F", "S", "T", "W"
+        ));
+    }
+
+    private void setupInvalidDatabaseColumns() {
+        invalidDatabaseColumns.addAll(asList(
+                "b", "f", "s", "t", "w", "A", "Z"
+        ));
+    }
+
+    private void setupExpectedResults() {
+        setupExpectedDatabaseColumnByFlavor();
+        setupExpectedFlavorByDatabaseColumn();
+    }
+
+    private void setupExpectedDatabaseColumnByFlavor() {
+        expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.BITTER, "B");
+        expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.FRUITY, "F");
+        expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.SOFT, "S");
+        expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.STRONG, "T");
+        expectedDatabaseColumnByFlavor.put(BeerEntity.Flavor.SWEET, "W");
+    }
+
+    private void setupExpectedFlavorByDatabaseColumn() {
+        expectedDatabaseColumnByFlavor
+                .forEach((key, value) -> expectedFlavorByDatabaseColumn.put(value, key));
     }
 
     @Test
-    void testConvertToDatabaseColumn() {
-        // Arrange
-        final var expectedBitter = "B";
-        final var expectedFruity = "F";
-        final var expectedSoft   = "S";
-        final var expectedStrong = "T";
-        final var expectedSweet  = "W";
-
-        // Act
-        final var actualBitter = converter.convertToDatabaseColumn(BeerEntity.Flavor.BITTER);
-        final var actualFruity = converter.convertToDatabaseColumn(BeerEntity.Flavor.FRUITY);
-        final var actualSoft   = converter.convertToDatabaseColumn(BeerEntity.Flavor.SOFT);
-        final var actualStrong = converter.convertToDatabaseColumn(BeerEntity.Flavor.STRONG);
-        final var actualSweet  = converter.convertToDatabaseColumn(BeerEntity.Flavor.SWEET);
-
-        // Assert
-        assertEquals(expectedBitter, actualBitter, "Wrong result");
-        assertEquals(expectedFruity, actualFruity, "Wrong result");
-        assertEquals(expectedSoft,   actualSoft,   "Wrong result");
-        assertEquals(expectedStrong, actualStrong, "Wrong result");
-        assertEquals(expectedSweet,  actualSweet,  "Wrong result");
-        assertNull(converter.convertToDatabaseColumn(null), "A null argument should produce a null return value");
+    void convertsFlavorToDatabaseColumn() {
+        for (final var flavor : flavors) {
+            final var expected = expectedDatabaseColumnByFlavor.get(flavor);
+            final var actual = objectUnderTest.convertToDatabaseColumn(flavor);
+            assertSame(expected, actual);
+        }
     }
 
     @Test
-    void testConvertToEntityAttribute() {
-        // Arrange
-        final var expectedBitter = BeerEntity.Flavor.BITTER;
-        final var expectedFruity = BeerEntity.Flavor.FRUITY;
-        final var expectedSoft   = BeerEntity.Flavor.SOFT;
-        final var expectedStrong = BeerEntity.Flavor.STRONG;
-        final var expectedSweet  = BeerEntity.Flavor.SWEET;
+    void convertingFlavorToDatabaseColumnReturnsNullIfArgumentIsNull() {
+        assertNull(objectUnderTest.convertToDatabaseColumn((BeerEntity.Flavor) null));
+    }
 
-        // Act
-        final var actualBitter = converter.convertToEntityAttribute("B");
-        final var actualFruity = converter.convertToEntityAttribute("F");
-        final var actualSoft   = converter.convertToEntityAttribute("S");
-        final var actualStrong = converter.convertToEntityAttribute("T");
-        final var actualSweet  = converter.convertToEntityAttribute("W");
+    @Test
+    void convertsDatabaseColumnToFlavorIfArgumentIsValid() {
+        for (final var validDatabaseColumn : validDatabaseColumns) {
+            final var expected = expectedFlavorByDatabaseColumn.get(validDatabaseColumn);
+            final var actual = objectUnderTest.convertToEntityAttribute(validDatabaseColumn);
+            assertSame(expected, actual);
+        }
+    }
 
-        // Assert
-        assertEquals(expectedBitter, actualBitter, "Wrong result");
-        assertEquals(expectedFruity, actualFruity, "Wrong result");
-        assertEquals(expectedSoft,   actualSoft,   "Wrong result");
-        assertEquals(expectedStrong, actualStrong, "Wrong result");
-        assertEquals(expectedSweet,  actualSweet,  "Wrong result");
-        assertNull(converter.convertToEntityAttribute(null), "A null argument should produce a null return value");
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> converter.convertToEntityAttribute("invalidInput"),
-                "Any argument value other than null, \"B\", \"F\", \"S\", \"T\" or \"W\" should throw an exception"
-        );
+    @Test
+    void convertingDatabaseColumnToFlavorReturnsNullIfArgumentIsNull() {
+        assertNull(objectUnderTest.convertToEntityAttribute((String) null));
+    }
+
+    @Test
+    void throwsExceptionWhenConvertingDatabaseColumnToFlavorIfArgumentIsInvalid() {
+        for (final var invalidDatabaseColumn : invalidDatabaseColumns) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> objectUnderTest.convertToEntityAttribute(invalidDatabaseColumn)
+            );
+        }
     }
 }

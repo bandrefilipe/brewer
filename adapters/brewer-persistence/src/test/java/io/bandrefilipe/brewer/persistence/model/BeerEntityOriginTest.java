@@ -22,11 +22,20 @@
 package io.bandrefilipe.brewer.persistence.model;
 
 import io.bandrefilipe.brewer.persistence.model.BeerEntity.Origin;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.TreeSet;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author bandrefilipe
@@ -34,24 +43,73 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class BeerEntityOriginTest {
 
+    private final TreeSet<String> validCodes = new TreeSet<>();
+    private final TreeSet<String> invalidCodes = new TreeSet<>();
+    private final HashMap<String, Origin> expectedOriginByCodeMap = new HashMap<>();
+
+    @BeforeEach
+    void setup() {
+        setupValidCodes();
+        setupInvalidCodes();
+        setupExpectedOriginByCodeMap();
+    }
+
+    @AfterEach
+    void tearDown() {
+        validCodes.clear();
+        invalidCodes.clear();
+        expectedOriginByCodeMap.clear();
+    }
+
+    private void setupValidCodes() {
+        validCodes.addAll(asList(
+                "D", "I"
+        ));
+    }
+
+    private void setupInvalidCodes() {
+        invalidCodes.addAll(asList(
+                "d", "i", "A", "Z"
+        ));
+    }
+
+    private void setupExpectedOriginByCodeMap() {
+        expectedOriginByCodeMap.put("D", Origin.DOMESTIC);
+        expectedOriginByCodeMap.put("I", Origin.IMPORTED);
+    }
+
     @Test
-    void testGetByCode() {
-        // Arrange
-        final var expectedDomestic = Origin.DOMESTIC;
-        final var expectedImported = Origin.IMPORTED;
+    void getsEnumByCodeIfArgumentIsValid() {
+        for (final var code : validCodes) {
+            final var expected = expectedOriginByCodeMap.get(code);
+            final var actual = Origin.getByCode(code);
+            assertNotNull(actual);
+            assertSame(expected, actual);
+        }
+    }
 
-        // Act
-        final var actualDomestic = Origin.getByCode("D");
-        final var actualImported = Origin.getByCode("I");
+    @Test
+    void gettingEnumByCodeReturnsNullIfArgumentIsNull() {
+        assertNull(Origin.getByCode((String) null));
+    }
 
-        // Assert
-        assertSame(expectedDomestic, actualDomestic, "Wrong result");
-        assertSame(expectedImported, actualImported, "Wrong result");
-        assertNull(Origin.getByCode(null), "A null argument should produce a null return value");
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> Origin.getByCode("invalidInput"),
-                "Any argument value other than null, \"D\" or \"I\" should throw an exception"
-        );
+    @Test
+    void throwsExceptionWhenGettingEnumByCodeIfCodeIsInvalid() {
+        for (final var code : invalidCodes) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> Origin.getByCode(code)
+            );
+        }
+    }
+
+    @Test
+    void allEnumsAreTested() {
+        final var testedOrigins = validCodes
+                .stream()
+                .map(Origin::getByCode)
+                .collect(toList());
+        final var origins = asList(Origin.values());
+        assertTrue(testedOrigins.containsAll(origins));
     }
 }

@@ -56,7 +56,7 @@ class LoggerInterceptor extends HandlerInterceptorAdapter {
                              final Object handler) {
         setRequestMetadata(request);
         if (isLogInfoEnabled()) {
-            log.info("[preHandle] {} \"{}\" mapped to {}",
+            log.info("Request {} \"{}\" mapped to {}",
                     request.getMethod(),
                     getRequestURI(request),
                     handler);
@@ -70,7 +70,7 @@ class LoggerInterceptor extends HandlerInterceptorAdapter {
                            final Object handler,
                            final ModelAndView modelAndView) {
         if (isLogInfoEnabled()) {
-            log.info("[postHandle] Completed with status {} in {} ms",
+            log.info("Request completed with status {} in {} ms",
                     getResponseStatus(response),
                     getResponseTimeInMillis(request));
         }

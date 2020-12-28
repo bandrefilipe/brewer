@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author bandrefilipe
  * @since 2020-10-29
@@ -41,8 +43,8 @@ class ApiConversionFacade implements ConversionFacade {
 
     @Autowired
     ApiConversionFacade(final Function<Beer, BeerResponse> beerToBeerResponseFunction) {
-        log.debug("Creating component for class {}", ApiConversionFacade.class);
-        this.beerToBeerResponseFunction = beerToBeerResponseFunction;
+        log.debug("Creating component for {}", this.getClass());
+        this.beerToBeerResponseFunction = requireNonNull(beerToBeerResponseFunction);
     }
 
     @Override

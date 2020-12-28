@@ -21,7 +21,6 @@
  */
 package io.bandrefilipe.brewer.persistence.model;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,13 +28,14 @@ import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @param <T> The type of object under test.
  * @author bandrefilipe
  * @since 2020-10-10
  */
-abstract class AbstractEqualsAndHashcodeTest<T> {
+abstract class AbstractEqualsAndHashCodeTest<T> {
 
     private Object x;
     private Object y;
@@ -44,7 +44,7 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
     abstract T newObject();
 
     @BeforeEach
-    final void beforeEach() {
+    final void setup() {
         x = newObject();
         y = newObject();
         z = newObject();
@@ -55,8 +55,9 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * {@code x.equals(x)} should return {@code true}.
      */
     @Test
-    final void testEqualsIsReflexive() {
-        assertTrue(x.equals(x), "Wrong result");
+    final void equalsIsReflexive() {
+        final var xEqualsX = x.equals(x);
+        assertTrue(xEqualsX);
     }
 
     /**
@@ -65,9 +66,11 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * {@code y.equals(x)} returns {@code true}.
      */
     @Test
-    final void testEqualsIsSymmetric() {
-        assertTrue(x.equals(y), "Wrong result");
-        assertTrue(y.equals(x), "Wrong result");
+    final void equalsIsSymmetric() {
+        final var xEqualsY = x.equals(y);
+        final var yEqualsX = y.equals(x);
+        assertTrue(xEqualsY);
+        assertTrue(yEqualsX);
     }
 
     /**
@@ -77,10 +80,13 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * then {@code x.equals(z)} should return {@code true}.
      */
     @Test
-    final void testEqualsIsTransitive() {
-        assertTrue(x.equals(y), "Wrong result");
-        assertTrue(y.equals(z), "Wrong result");
-        assertTrue(x.equals(z), "Wrong result");
+    final void equalsIsTransitive() {
+        final var xEqualsY = x.equals(y);
+        final var yEqualsZ = y.equals(z);
+        final var xEqualsZ = x.equals(z);
+        assertTrue(xEqualsY);
+        assertTrue(yEqualsZ);
+        assertTrue(xEqualsZ);
     }
 
     /**
@@ -92,16 +98,11 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * on the objects is modified.
      */
     @Test
-    final void testEqualsIsConsistent() {
-        // Arrange
+    final void equalsIsConsistent() {
         final var max = 100;
         final var expected = x.equals(y);
-
-        // Act
         for (int i = 1; i <= max; i++) {
             final var actual = x.equals(y);
-
-        // Assert
             final var current = i;
             assertEquals(expected, actual,
                     () -> format("Multiple calls to equals(Object) should produce consistent results. It failed on attempt %d/%d", current, max));
@@ -113,8 +114,9 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * {@code x.equals(null)} should return {@code false}.
      */
     @Test
-    final void testEqualsNonNullity() {
-        assertFalse(x.equals(null), "Wrong result");
+    final void equalsReturnsFalseIfArgumentIsNull() {
+        final var xEqualsNull = x.equals(null);
+        assertFalse(xEqualsNull);
     }
 
     /**
@@ -128,16 +130,11 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * application to another execution of the same application.
      */
     @Test
-    final void testHashcodeIsConsistent() {
-        // Arrange
+    final void hashCodeIsConsistent() {
         final var max = 100;
         final var expected = x.hashCode();
-
-        // Act
         for (int i = 1; i <= max; i++) {
             final var actual = x.hashCode();
-
-        // Assert
             final var current = i;
             assertEquals(expected, actual,
                     () -> format("Multiple calls to hashcode() should produce consistent results. It failed on attempt %d/%d", current, max));
@@ -152,17 +149,12 @@ abstract class AbstractEqualsAndHashcodeTest<T> {
      * the two objects must produce the same integer result.
      */
     @Test
-    final void testHashcodeOfTwoEqualObjects() {
-        // Arrange
+    final void hashCodesOfTwoEqualObjectsMustBeSameValue() {
         if (!x.equals(y)) {
-            Assertions.fail("Objects x and y should be equals");
+            fail("Objects x and y should be equals");
         }
         final var expected = x.hashCode();
-
-        // Act
         final var actual = y.hashCode();
-
-        // Assert
-        assertEquals(expected, actual, "The hashcode of two equal objects should be the same value");
+        assertEquals(expected, actual);
     }
 }

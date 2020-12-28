@@ -29,11 +29,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -42,33 +43,32 @@ import static org.mockito.Mockito.verify;
  */
 class ApiConversionFacadeTest {
 
-    private Function<Beer, BeerResponse> $beerToBeerResponseFunction;
+    private Function<Beer, BeerResponse> mockedBeerToBeerResponseFunction;
 
-    private ApiConversionFacade classUnderTest;
+    private ApiConversionFacade objectUnderTest;
 
     @BeforeEach
-    void beforeEach() {
-        this.$beerToBeerResponseFunction = mock(Function.class);
+    void setup() {
+        setupBeerToBeerResponseFunction();
+        objectUnderTest = spy(new ApiConversionFacade(mockedBeerToBeerResponseFunction));
+    }
 
-        this.classUnderTest = new ApiConversionFacade($beerToBeerResponseFunction);
+    private void setupBeerToBeerResponseFunction() {
+        mockedBeerToBeerResponseFunction = mock(Function.class);
+        doReturn(new BeerResponse())
+                .when(mockedBeerToBeerResponseFunction).apply(any());
     }
 
     @Test
-    void testConvertToBeerResponse() {
-        // Arrange
-        final var functionResult = new BeerResponse();
-        doReturn(functionResult)
-                .when($beerToBeerResponseFunction).apply(any(Beer.class));
+    void beerToBeerResponseFunctionMustBeCalledEvenForANullArgument() {
+        objectUnderTest.convertToBeerResponse(null);
+        verify(mockedBeerToBeerResponseFunction, atLeastOnce()).apply(any());
+    }
 
+    @Test
+    void beerToBeerResponseFunctionMustReceiveTheSameArgumentInstance() {
         final var input = BeerFactory.newBeer();
-
-        final var expected = functionResult;
-
-        // Act
-        final var actual = classUnderTest.convertToBeerResponse(input);
-
-        // Assert
-        assertSame(expected, actual);
-        verify($beerToBeerResponseFunction).apply(same(input));
+        objectUnderTest.convertToBeerResponse(input);
+        verify(mockedBeerToBeerResponseFunction, atLeastOnce()).apply(same(input));
     }
 }

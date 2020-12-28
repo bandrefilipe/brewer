@@ -31,13 +31,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -46,82 +48,106 @@ import static org.mockito.Mockito.verify;
  */
 class BeerRepositoryAdapterTest {
 
-    private ConversionFacade $conversionFacade;
-    private BeerEntityRepository $beerEntityRepository;
+    private ConversionFacade mockedConversionFacade;
+    private BeerEntityRepository mockedBeerEntityRepository;
 
-    private BeerRepositoryAdapter classUnderTest;
+    private BeerRepositoryAdapter objectUnderTest;
 
     @BeforeEach
-    void beforeEach() {
-        $conversionFacade = mock(ConversionFacade.class);
-        $beerEntityRepository = mock(BeerEntityRepository.class);
+    void setup() {
+        setupConversionFacade();
+        setupBeerEntityRepository();
 
-        classUnderTest = new BeerRepositoryAdapter($conversionFacade, $beerEntityRepository);
+        objectUnderTest = spy(new BeerRepositoryAdapter(mockedConversionFacade, mockedBeerEntityRepository));
+    }
+
+    private void setupConversionFacade() {
+        mockedConversionFacade = mock(ConversionFacade.class);
+        doReturn(Beer.builder().build())
+                .when(mockedConversionFacade).convertToBeer(any(BeerEntity.class));
+    }
+
+    private void setupBeerEntityRepository() {
+        mockedBeerEntityRepository = mock(BeerEntityRepository.class);
+        doReturn(Optional.empty())
+                .when(mockedBeerEntityRepository).findById(isNull());
+        doReturn(Optional.of(new BeerEntity()))
+                .when(mockedBeerEntityRepository).findById(any(Long.class));
+        doReturn(Optional.empty())
+                .when(mockedBeerEntityRepository).findBySku(isNull());
+        doReturn(Optional.of(new BeerEntity()))
+                .when(mockedBeerEntityRepository).findBySku(any(String.class));
     }
 
     @Test
-    void testRetrieveBeerById() {
-        // Arrange
-        final var entity = new BeerEntity();
-        entity.setSku("TEST001");
-        doReturn(Optional.of(entity)).when($beerEntityRepository).findById(eq(123L));
-
-        doReturn(Beer
-                .builder()
-                .id(Id.valueOf(123))
-                .sku(SKU.valueOf("TEST001"))
-                .build()
-        ).when($conversionFacade).convertToBeer(same(entity));
-
-        final var expected = Optional.of(Beer
-                .builder()
-                .id(Id.valueOf(123))
-                .sku(SKU.valueOf("TEST001"))
-                .build());
-
-        // Act
-        final var actual = classUnderTest.retrieveBeer(Id.valueOf(123));
-
-        // Assert
-        assertEquals(expected, actual);
+    void conversionIsCalledIfEntityIsRetrievedById() {
+        objectUnderTest.retrieveBeer(Id.valueOf(1));
+        verify(mockedConversionFacade, times(1)).convertToBeer(any(BeerEntity.class));
     }
 
     @Test
-    void testRetrieveBeerBySku() {
-        // Arrange
-        final var entity = new BeerEntity();
-        entity.setSku("TEST002");
-        doReturn(Optional.of(entity)).when($beerEntityRepository).findBySku(eq("TEST002"));
-
-        doReturn(Beer
-                .builder()
-                .sku(SKU.valueOf("TEST002"))
-                .build()
-        ).when($conversionFacade).convertToBeer(same(entity));
-
-        final var expected = Optional.of(Beer
-                .builder()
-                .sku(SKU.valueOf("TEST002"))
-                .build());
-
-        // Act
-        final var actual = classUnderTest.retrieveBeer(SKU.valueOf("TEST002"));
-
-        // Assert
-        assertEquals(expected, actual);
+    void beerIsReturnedIfEntityIsRetrievedById() {
+        assertTrue(objectUnderTest
+                .retrieveBeer(Id.valueOf(1))
+                .isPresent()
+        );
     }
 
     @Test
-    void testConvertToBeerNotBeingCalledForEmptyBeer() {
-        // Arrange
-        doReturn(Optional.empty()).when($beerEntityRepository).findById(any());
-        doReturn(Optional.empty()).when($beerEntityRepository).findBySku(any());
+    void conversionIsNotCalledIfEntityIsNotRetrievedById() {
+        objectUnderTest.retrieveBeer(Id.empty());
+        verify(mockedConversionFacade, never()).convertToBeer(any());
+    }
 
-        // Act
-        classUnderTest.retrieveBeer(Id.empty());
-        classUnderTest.retrieveBeer(SKU.empty());
+    @Test
+    void beerIsNotReturnedIfEntityIsNotRetrievedById() {
+        assertTrue(objectUnderTest
+                .retrieveBeer(Id.empty())
+                .isEmpty()
+        );
+    }
 
-        // Assert
-        verify($conversionFacade, never()).convertToBeer(any());
+    @Test
+    void throwsNullPointerExceptionIfIdArgumentIsNull() {
+        assertThrows(
+                NullPointerException.class,
+                () -> objectUnderTest.retrieveBeer((Id) null)
+        );
+    }
+
+    @Test
+    void conversionIsCalledIfEntityIsRetrievedBySku() {
+        objectUnderTest.retrieveBeer(SKU.valueOf("TEST"));
+        verify(mockedConversionFacade, times(1)).convertToBeer(any(BeerEntity.class));
+    }
+
+    @Test
+    void beerIsReturnedIfEntityIsRetrievedBySku() {
+        assertTrue(objectUnderTest
+                .retrieveBeer(SKU.valueOf("TEST"))
+                .isPresent()
+        );
+    }
+
+    @Test
+    void conversionIsNotCalledIfEntityIsNotRetrievedBySku() {
+        objectUnderTest.retrieveBeer(SKU.empty());
+        verify(mockedConversionFacade, never()).convertToBeer(any());
+    }
+
+    @Test
+    void beerIsNotReturnedIfEntityIsNotRetrievedBySku() {
+        assertTrue(objectUnderTest
+                .retrieveBeer(SKU.empty())
+                .isEmpty()
+        );
+    }
+
+    @Test
+    void throwsNullPointerExceptionIfSkuArgumentIsNull() {
+        assertThrows(
+                NullPointerException.class,
+                () -> objectUnderTest.retrieveBeer((SKU) null)
+        );
     }
 }

@@ -19,37 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.api.config.swagger;
-
-import io.bandrefilipe.brewer.api.controller.RestControllerPackageMarker;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.builders.RequestHandlerSelectors;
-
-import java.util.function.Predicate;
+package io.bandrefilipe.brewer.application.core.domain.entities;
 
 /**
  * @author bandrefilipe
- * @since 2020-07-26
+ * @since 2020-12-19
  */
-@Slf4j
-@Configuration
-class RequestHandlerBean {
+public class BeerFactory {
 
-    @Bean
-    @Profile("default | test")
-    Predicate<RequestHandler> defaultRequestHandler() {
-        log.debug("Creating bean defaultRequestHandler");
-        return RequestHandlerSelectors.any();
+    private BeerFactory() {
+        throw new IllegalStateException();
     }
 
-    @Bean
-    @Profile("prod")
-    Predicate<RequestHandler> prodRequestHandler() {
-        log.debug("Creating bean prodRequestHandler");
-        return RequestHandlerSelectors.basePackage(RestControllerPackageMarker.class.getPackageName());
+    public static Beer newBeer() {
+        return Beer.builder().build();
     }
 }

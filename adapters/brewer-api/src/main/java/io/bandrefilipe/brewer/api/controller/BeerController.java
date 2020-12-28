@@ -38,6 +38,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author bandrefilipe
  * @since 2020-10-22
@@ -55,8 +57,8 @@ class BeerController {
     @Autowired
     BeerController(final ConversionFacade conversionFacade,
                    final BeerService beerService) {
-        this.conversionFacade = conversionFacade;
-        this.beerService = beerService;
+        this.conversionFacade = requireNonNull(conversionFacade);
+        this.beerService = requireNonNull(beerService);
     }
 
     @GetMapping(path = "/{id}")

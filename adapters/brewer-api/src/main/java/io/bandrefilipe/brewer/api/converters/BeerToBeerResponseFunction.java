@@ -37,7 +37,7 @@ import java.util.function.Function;
 class BeerToBeerResponseFunction implements Function<Beer, BeerResponse> {
 
     private BeerToBeerResponseFunction() {
-        log.debug("Creating component for class {}", BeerToBeerResponseFunction.class);
+        log.debug("Creating component for {}", this.getClass());
     }
 
     private static class BillPughSingleton {

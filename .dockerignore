@@ -35,9 +35,11 @@
 **/build/
 /gradle/
 /.dockerignore
+/.gitattributes
 /.gitignore
 /Dockerfile
 /gradlew
 /gradlew.bat
 /LICENSE
 **/README.md
+**/out/production

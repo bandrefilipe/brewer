@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.bandrefilipe.brewer.api.config.swagger;
+package io.bandrefilipe.brewer.api.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +34,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author bandrefilipe
  * @since 2020-07-26
@@ -47,8 +49,8 @@ class SwaggerConfiguration {
     @Autowired
     SwaggerConfiguration(final Predicate<RequestHandler> requestHandler,
                          final SwaggerProperties properties) {
-        this.requestHandler = requestHandler;
-        this.properties = properties;
+        this.requestHandler = requireNonNull(requestHandler);
+        this.properties = requireNonNull(properties);
     }
 
     @Bean

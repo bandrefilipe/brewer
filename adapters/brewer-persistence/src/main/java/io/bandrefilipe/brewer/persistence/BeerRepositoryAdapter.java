@@ -32,6 +32,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author bandrefilipe
  * @since 2020-10-25
@@ -46,9 +48,9 @@ class BeerRepositoryAdapter implements BeerRepository {
     @Autowired
     BeerRepositoryAdapter(final ConversionFacade conversionFacade,
                           final BeerEntityRepository beerEntityRepository) {
-        log.debug("Creating component for class {}", BeerRepositoryAdapter.class);
-        this.conversionFacade = conversionFacade;
-        this.beerEntityRepository = beerEntityRepository;
+        log.debug("Creating component for {}", this.getClass());
+        this.conversionFacade = requireNonNull(conversionFacade);
+        this.beerEntityRepository = requireNonNull(beerEntityRepository);
     }
 
     @Override

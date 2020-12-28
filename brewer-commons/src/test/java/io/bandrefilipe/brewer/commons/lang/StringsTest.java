@@ -21,10 +21,18 @@
  */
 package io.bandrefilipe.brewer.commons.lang;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.TreeSet;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author bandrefilipe
@@ -32,31 +40,106 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 class StringsTest {
 
+    private String nonWordCharacters;
+    private final TreeSet<String> nonWordCharactersSet = new TreeSet<>();
+
+    private String wordCharacters;
+    private final TreeSet<String> wordCharactersSet = new TreeSet<>();
+
+    private String mixedCharacters;
+    private final TreeSet<String> mixedCharactersSet = new TreeSet<>();
+
+    private final String lowerCaseAlphabet = "abcdefghijklmnopqrstuvwxyz";
+    private final String expectedUpperCaseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private final String lowerCaseSpecialCharacters = "áâàåãäæéêèëðíîìïóôòøõöúûùüçñý";
+    private final String expectedUpperCaseSpecialCharacters = "ÁÂÀÅÃÄÆÉÊÈËÐÍÎÌÏÓÔÒØÕÖÚÛÙÜÇÑÝ";
+
+    @BeforeEach
+    void setup() {
+        setupNonWordCharacters();
+        setupWordCharacters();
+        setupMixedCharacters();
+    }
+
+    @AfterEach
+    void tearDown() {
+        nonWordCharactersSet.clear();
+        wordCharactersSet.clear();
+        mixedCharactersSet.clear();
+    }
+
+    private void setupNonWordCharacters() {
+        nonWordCharacters = "~!@#$%^&*()+`-={}|[]\\:\";'<>?,./áâàåãäæéêèëðíîìïóôòøõöúûùüçñýÁÂÀÅÃÄÆÉÊÈËÐÍÎÌÏÓÔÒØÕÖÚÛÙÜÇÑÝ";
+        for (final var character : nonWordCharacters.toCharArray()) {
+            nonWordCharactersSet.add(String.valueOf(character));
+        }
+    }
+
+    private void setupWordCharacters() {
+        wordCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+        for (final var character : wordCharacters.toCharArray()) {
+            wordCharactersSet.add(String.valueOf(character));
+        }
+    }
+
+    private void setupMixedCharacters() {
+        mixedCharactersSet.addAll(nonWordCharactersSet);
+        mixedCharactersSet.addAll(wordCharactersSet);
+
+        final StringBuilder builder = new StringBuilder();
+        mixedCharactersSet.forEach(builder::append);
+        mixedCharacters = builder.toString();
+    }
+
     @Test
     void testEmptyString() {
-        assertEquals("", Strings.EMPTY);
+        assertThat(Strings.EMPTY)
+                .isEmpty();
     }
 
     @Test
-    void testReplaceAllNonWordCharacters() {
-        // Arrange
-        final var matchingInput = "~!@#$%^&*()+`-={}|[]\\:\";'<>?,./áâàåãäæéêèëðíîìïóôòøõöúûùüçñýÁÂÀÅÃÄÆÉÊÈËÐÍÎÌÏÓÔÒØÕÖÚÛÙÜÇÑÝ";
-        final var expectedMatching = "";
-
-        final var mismatchingInput = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
-        final var expectedMismatching = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
-
-        // Act
-        final var actualMatching = Strings.replaceAllNonWordCharacters(matchingInput, "");
-        final var actualMismatching = Strings.replaceAllNonWordCharacters(mismatchingInput, "");
-
-        // Assert
-        assertEquals(expectedMatching, actualMatching);
-        assertEquals(expectedMismatching, actualMismatching);
+    void replacesEverythingIfInputIsAllNonWordCharacters() {
+        final var replacement = "";
+        assertThat(Strings.replaceAllNonWordCharacters(nonWordCharacters, replacement))
+                .isEmpty();
     }
 
     @Test
-    void testTrimToEmpty() {
+    void doNotReplaceAnythingIfInputIsAllValidWordCharacters() {
+        final var replacement = "";
+        assertThat(Strings.replaceAllNonWordCharacters(wordCharacters, replacement))
+                .isEqualTo(wordCharacters);
+    }
+
+    @Test
+    void replacesOnlyTheNonWordCharactersIfInputIsMixed() {
+        final var replacement = "";
+        final var result = Strings.replaceAllNonWordCharacters(mixedCharacters, replacement);
+        for (final var character : result.split("")) {
+            assertTrue(wordCharactersSet.contains(character));
+            assertFalse(nonWordCharacters.contains(character));
+        }
+    }
+
+    @Test
+    void throwsExceptionWhenReplacingNonWordCharactersIfInputIsNull() {
+        assertThrows(
+                NullPointerException.class,
+                () -> Strings.replaceAllNonWordCharacters(null, "replacement")
+        );
+    }
+
+    @Test
+    void throwsExceptionWhenReplacingNonWordCharactersIfReplacementIsNull() {
+        assertThrows(
+                NullPointerException.class,
+                () -> Strings.replaceAllNonWordCharacters(nonWordCharacters, null)
+        );
+    }
+
+    @Test
+    void trimsToEmpty() {
         assertEquals("", Strings.trimToEmpty(null));
         assertEquals("", Strings.trimToEmpty(""));
         assertEquals("", Strings.trimToEmpty("     "));
@@ -65,32 +148,28 @@ class StringsTest {
     }
 
     @Test
-    void testTrimToNull() {
+    void trimsToNull() {
         assertNull(Strings.trimToNull(null));
         assertNull(Strings.trimToNull(""));
         assertNull(Strings.trimToNull("     "));
-
         assertEquals("abc", Strings.trimToEmpty("abc"));
         assertEquals("abc", Strings.trimToEmpty("    abc    "));
     }
 
     @Test
-    void testToRootUpperCase() {
-        // Arrange
-        final var alphabetInput    = "abcdefghijklmnopqrstuvwxyz";
-        final var expectedAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        final var specialCharactersInput    = "áâàåãäæéêèëðíîìïóôòøõöúûùüçñý";
-        final var expectedSpecialCharacters = "ÁÂÀÅÃÄÆÉÊÈËÐÍÎÌÏÓÔÒØÕÖÚÛÙÜÇÑÝ";
-
-        // Act
-        final var actualAlphabet = Strings.toRootUpperCase(alphabetInput);
-        final var actualSpecialCharacters = Strings.toRootUpperCase(specialCharactersInput);
-
-        // Assert
+    void toRootUpperCaseReturnsNullIfArgumentIsNull() {
         assertNull(Strings.toRootUpperCase(null));
+    }
 
-        assertEquals(expectedAlphabet, actualAlphabet);
-        assertEquals(expectedSpecialCharacters, actualSpecialCharacters);
+    @Test
+    void toRootUpperCaseConvertsAlphabet() {
+        assertThat(Strings.toRootUpperCase(lowerCaseAlphabet))
+                .isEqualTo(expectedUpperCaseAlphabet);
+    }
+
+    @Test
+    void toRootUpperCaseConvertsSpecialCharacters() {
+        assertThat(Strings.toRootUpperCase(lowerCaseSpecialCharacters))
+                .isEqualTo(expectedUpperCaseSpecialCharacters);
     }
 }
