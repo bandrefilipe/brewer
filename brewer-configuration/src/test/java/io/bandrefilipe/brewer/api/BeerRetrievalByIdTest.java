@@ -22,7 +22,6 @@
 package io.bandrefilipe.brewer.api;
 
 import io.bandrefilipe.brewer.api.model.BeerResponse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -76,7 +75,7 @@ class BeerRetrievalByIdTest extends AbstractRestAPITest {
         assertEquals(expectedResponseStatus, actualResponse.getStatusCode());
     }
 
-    @Disabled("Implementation pending") @Test
+    @Test
     void testResponseBadRequest() {
         // Arrange
         final var requestEntity = RequestEntity

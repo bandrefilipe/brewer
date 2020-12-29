@@ -30,12 +30,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -45,6 +48,7 @@ import static java.util.Objects.requireNonNull;
  * @since 2020-10-22
  */
 @Slf4j
+@Validated
 @RestController
 @RequestMapping(
         path = ApiVersion.V1 + "/beers",
@@ -62,7 +66,7 @@ class BeerController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<BeerResponse> getBeerById(@PathVariable final Long id) {
+    public ResponseEntity<BeerResponse> getBeerById(@PathVariable @PositiveOrZero final Long id) {
         log.debug("input: {}", id);
         return Optional
                 .ofNullable(id)
@@ -74,7 +78,7 @@ class BeerController {
     }
 
     @GetMapping
-    public ResponseEntity<BeerResponse> getBeerBySku(@RequestParam final String sku) {
+    public ResponseEntity<BeerResponse> getBeerBySku(@RequestParam @Pattern(regexp = "\\w+") final String sku) {
         log.debug("input: {}", sku);
         return Optional
                 .ofNullable(sku)

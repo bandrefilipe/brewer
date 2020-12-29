@@ -37,7 +37,7 @@ public final class Strings {
 
     public static final String EMPTY = "";
 
-    private static final Pattern NON_WORD_CHARACTER_PATTERN = Pattern.compile("\\W"); // Anything that isn't a word character (including punctuation).
+    private static final Pattern NON_WORD_CHARACTER_PATTERN = Pattern.compile("\\W+"); // Anything that isn't a word character (including punctuation).
 
     public static String replaceAllNonWordCharacters(final CharSequence input,
                                                      final String replacement) {
