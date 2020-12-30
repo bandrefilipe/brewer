@@ -40,6 +40,7 @@ The application is divided in multiple modules, following the aforementioned hex
 - [The best way to map a @NaturalId business key with JPA and Hibernate](https://vladmihalcea.com/the-best-way-to-map-a-naturalid-business-key-with-jpa-and-hibernate/ "vladmihalcea.com")
 - [7 Popular Unit Test Naming Conventions](https://dzone.com/articles/7-popular-unit-test-naming "dzone.com")
 - [Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/ "lexi-lambda.github.com")
+- [Multi-arch and images, the simple way](https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/ "docker.com")
 
 ## License
 ```
@@ -74,6 +75,6 @@ SOFTWARE.
 - [Java 11](https://www.oracle.com/java/ "oracle.com")
 - [JUnit 5](https://junit.org/junit5/ "junit.org")
 - [Spring Boot 2.3](https://spring.io/projects/spring-boot "spring.io")
-- [Gradle 6.3](https://gradle.org/ "gradle.org")
+- [Gradle 6.7](https://gradle.org/ "gradle.org")
 - [Docker](https://www.docker.com "docker.com")
 - [SonarCloud](https://sonarcloud.io "sonarcloud.io")
