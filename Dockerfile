@@ -1,4 +1,4 @@
-FROM gradle:6.3-jdk11 AS builder
+FROM gradle:6.7.1-jdk11 AS builder
 COPY --chown=gradle:gradle . /gradle
 WORKDIR /gradle
 RUN gradle build
