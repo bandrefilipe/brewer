@@ -53,6 +53,7 @@ class ApiConversionFacadeTest {
         objectUnderTest = spy(new ApiConversionFacade(mockedBeerToBeerResponseFunction));
     }
 
+    @SuppressWarnings("unchecked")
     private void setupBeerToBeerResponseFunction() {
         mockedBeerToBeerResponseFunction = mock(Function.class);
         doReturn(new BeerResponse())

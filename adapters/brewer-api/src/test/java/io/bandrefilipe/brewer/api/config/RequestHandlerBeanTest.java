@@ -55,6 +55,7 @@ class RequestHandlerBeanTest {
     private final Set<RequestHandler> invalidRequestHandlers = new HashSet<>();
     private final Set<RequestHandler> mixedRequestHandlers = new HashSet<>();
 
+    @SuppressWarnings("deprecation")
     private static RequestHandler mockRequestHandlerFor(final Class<?> aClass) {
         final var mockedRequestHandler = mock(RequestHandler.class);
         doReturn(aClass)

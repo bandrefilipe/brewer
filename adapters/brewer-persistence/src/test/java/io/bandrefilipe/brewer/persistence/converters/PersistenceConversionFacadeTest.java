@@ -53,6 +53,7 @@ class PersistenceConversionFacadeTest {
         objectUnderTest = spy(new PersistenceConversionFacade(mockedBeerEntityToBeerFunction));
     }
 
+    @SuppressWarnings("unchecked")
     private void setupBeerEntityToBeerFunction() {
         mockedBeerEntityToBeerFunction = mock(Function.class);
         doReturn(BeerFactory.newBeer())
