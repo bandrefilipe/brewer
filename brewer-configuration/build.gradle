@@ -1,17 +1,3 @@
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
 }
-
-dependencies {
-    implementation project(':adapters:brewer-api')
-    implementation project(':adapters:brewer-persistence')
-    implementation project(':adapters:brewer-web')
-    implementation project(':brewer-application')
-    implementation project(':brewer-commons')
-
-    // Spring Boot Starter
-    implementation('org.springframework.boot:spring-boot-starter')
-
-    // Spring Boot Starter :: Web
-    testImplementation('org.springframework.boot:spring-boot-starter-web')
-}

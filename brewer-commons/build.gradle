@@ -1,6 +1,0 @@
-dependencies {
-    // Apache Commons :: Lang-3
-    implementation('org.apache.commons:commons-lang3:3.11');
-    // Spring Boot Starter :: Log4j2
-    api('org.springframework.boot:spring-boot-starter-log4j2')
-}

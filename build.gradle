@@ -16,12 +16,11 @@ ext {
     setProperty('springBootVersion', '2.3.4.RELEASE')
 }
 
-subprojects {
+allprojects {
     group('io.bandrefilipe')
     version(props.getProperty('app.version'))
 
     apply(plugin: 'io.spring.dependency-management')
-    apply(plugin: 'java-library')
     apply(plugin: 'jacoco')
 
     repositories {
@@ -33,6 +32,16 @@ subprojects {
         implementation.exclude(group: 'org.springframework.boot', module: 'spring-boot-starter-logging')
     }
 
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        }
+    }
+}
+
+subprojects {
+    apply(plugin: 'java-library')
+
     dependencies {
         // JUnit
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -42,12 +51,6 @@ subprojects {
         // Lombok
         compileOnly('org.projectlombok:lombok')
         annotationProcessor('org.projectlombok:lombok')
-    }
-
-    dependencyManagement {
-        imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-        }
     }
 
     sonarqube {
@@ -75,6 +78,109 @@ subprojects {
     }
 }
 
+project(":adapters:brewer-api") {
+    ext {
+        setProperty('springfoxVersion', '3.0.0')
+    }
+
+    dependencies {
+        implementation project(':brewer-application')
+        implementation project(':brewer-commons')
+
+        // Spring Boot Starter :: Web
+        implementation('org.springframework.boot:spring-boot-starter-web')
+        // Spring Boot Starter :: Validation
+        implementation('org.springframework.boot:spring-boot-starter-validation')
+        // Springfox Boot Starter
+        implementation("io.springfox:springfox-boot-starter:${springfoxVersion}")
+    }
+}
+
+project(":adapters:brewer-persistence") {
+    dependencies {
+        implementation project(':brewer-application')
+        implementation project(':brewer-commons')
+
+        // Flyway :: Core
+        implementation('org.flywaydb:flyway-core')
+        // H2
+        runtimeOnly('com.h2database:h2')
+        // Spring Boot Starter :: Data JPA
+        implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    }
+}
+
+project(":adapters:brewer-web") {
+    ext {
+        setProperty('layoutDialectVersion', '2.5.1')
+        setProperty('bootstrapVersion', '3.3.7-1')
+        setProperty('jqueryVersion', '1.12.4')
+        setProperty('webjarsLocatorVersion', '0.40')
+    }
+
+    dependencies {
+        implementation project(':brewer-application')
+        implementation project(':brewer-commons')
+
+        // Spring Boot Starter :: Actuator
+        implementation('org.springframework.boot:spring-boot-starter-actuator')
+        // Spring Boot Starter :: Thymeleaf
+        implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+        // Spring Boot Starter :: Validation
+        implementation('org.springframework.boot:spring-boot-starter-validation')
+        // Spring Boot Starter :: Web
+        implementation('org.springframework.boot:spring-boot-starter-web')
+        // Thymeleaf :: Layout Dialect
+        implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${layoutDialectVersion}")
+        // Webjars :: Bootstrap
+        implementation("org.webjars:bootstrap:${bootstrapVersion}")
+        // Webjars :: jQuery
+        implementation("org.webjars:jquery:${jqueryVersion}")
+        // Webjars :: Locator
+        implementation("org.webjars:webjars-locator:${webjarsLocatorVersion}")
+    }
+
+    sonarqube {
+        skipProject = true
+    }
+}
+
+project(":brewer-application") {
+    dependencies {
+        implementation project(':brewer-commons')
+
+        // Spring Boot Starter
+        implementation('org.springframework.boot:spring-boot-starter')
+    }
+}
+
+project(":brewer-commons") {
+    dependencies {
+        // Apache Commons :: Lang-3
+        implementation('org.apache.commons:commons-lang3:3.11');
+        // Spring Boot Starter :: Log4j2
+        api('org.springframework.boot:spring-boot-starter-log4j2')
+    }
+}
+
+project(":brewer-configuration") {
+    apply(plugin: 'application')
+
+    dependencies {
+        implementation project(':adapters:brewer-api')
+        implementation project(':adapters:brewer-persistence')
+        implementation project(':adapters:brewer-web')
+        implementation project(':brewer-application')
+        implementation project(':brewer-commons')
+
+        // Spring Boot Starter
+        implementation('org.springframework.boot:spring-boot-starter')
+
+        // Spring Boot Starter :: Web
+        testImplementation('org.springframework.boot:spring-boot-starter-web')
+    }
+}
+
 sonarqube {
     properties {
         property 'sonar.host.url', 'https://sonarcloud.io'
@@ -83,11 +189,5 @@ sonarqube {
         property 'sonar.projectKey', 'bandrefilipe_brewer'
         property 'sonar.projectVersion', props.getProperty('app.version')
         property 'sonar.sourceEncoding', 'UTF-8'
-    }
-}
-
-project(":adapters:brewer-web") {
-    sonarqube {
-        skipProject = true
     }
 }

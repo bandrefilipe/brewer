@@ -1,6 +1,0 @@
-dependencies {
-    implementation project(':brewer-commons')
-
-    // Spring Boot Starter
-    implementation('org.springframework.boot:spring-boot-starter')
-}
